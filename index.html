@@ -17,8 +17,6 @@
     :root {
       --paper: #f6f1e8;
       --ink: #1b1918;
-      --muted: #5f5850;
-      --line: rgba(27, 25, 24, .14);
       --pink: #ff2bd6;
       --orange: #ff7a00;
       --lime: #8fe000;
@@ -33,14 +31,11 @@
       font: 400 17px/1.55 "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
       display: grid; place-items: center; padding: 24px 16px;
     }
-    main {
-      width: min(1120px, 100%);
-      display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-      gap: clamp(20px, 4vw, 64px); align-items: center;
-    }
+    main { display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
     /* Stage: cutout + doodles + star stickers share one coordinate system */
-    .stage { width: 100%; max-height: 88vh; aspect-ratio: 4 / 5; justify-self: center; }
+    .stage { width: min(320px, 70vw, 46vh); aspect-ratio: 4 / 5; }
     .stage svg { width: 100%; height: 100%; overflow: visible; display: block; }
     .me { animation: settle 1s cubic-bezier(.2,.8,.2,1) both; transform-origin: 500px 1000px; }
     .doodles path, .doodles circle {
@@ -72,36 +67,22 @@
     }
     @keyframes settle { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
 
-    /* Text */
-    .eyebrow { margin: 0 0 14px; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-    h1 { margin: 0; font: 400 clamp(60px, 8.4vw, 112px)/.92 "Instrument Serif", Georgia, serif; }
-    .role { margin: 14px 0 0; font: italic 400 clamp(24px, 2.6vw, 32px)/1.2 "Instrument Serif", Georgia, serif; }
-    .soon { margin: 28px 0 32px; padding-top: 24px; border-top: 1px solid var(--line); color: var(--muted); max-width: 40ch; }
-    .soon strong { color: var(--ink); font-weight: 500; }
-    .links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .soon { margin: 6px 0 0; font: italic 400 clamp(30px, 4vw, 40px)/1 "Instrument Serif", Georgia, serif; letter-spacing: .01em; }
+    .links { display: flex; gap: 12px; }
     .btn {
-      display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 999px;
-      font-weight: 500; font-size: 15px; text-decoration: none; color: var(--ink);
-      border: 1.5px solid var(--ink); background: rgba(255,255,255,.35);
-      transition: transform .15s ease, background .15s ease, color .15s ease, border-color .15s ease;
+      display: inline-block; min-width: 128px; padding: 12px 24px; border-radius: 999px;
+      font: 500 15px/1.2 "Inter Tight", system-ui, sans-serif; text-decoration: none;
+      color: #fff; background: var(--pink); border: 2px solid var(--pink);
+      box-shadow: 0 0 0 0 rgba(255, 43, 214, .5), 0 8px 22px rgba(255, 43, 214, .35);
+      transition: transform .15s ease, box-shadow .15s ease;
     }
-    .btn:hover { transform: translateY(-2px) rotate(-1deg); }
-    .btn-main { background: var(--ink); color: var(--paper); }
-    .btn-main:hover { background: var(--pink); border-color: var(--pink); color: #fff; }
-    .btn:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
-
-    @media (max-width: 760px) {
-      body { place-items: start center; }
-      main { grid-template-columns: 1fr; gap: 12px; }
-      .stage { width: min(100%, 420px); }
-      .text { text-align: center; }
-      .soon { margin-left: auto; margin-right: auto; }
-      .links { justify-content: center; }
-    }
+    .btn:hover { transform: translateY(-2px) rotate(-1.5deg); box-shadow: 0 0 0 6px rgba(255, 43, 214, .18), 0 10px 26px rgba(255, 43, 214, .45); }
+    .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
     @media (prefers-reduced-motion: reduce) {
       .me, .scribble-name { animation: none; opacity: 1; }
       .doodles path, .doodles circle { animation: none; stroke-dashoffset: 0; }
       .sticker { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
+      .btn { transition: none; }
     }
   </style>
 </head>
@@ -193,15 +174,11 @@
       </svg>
     </div>
 
-    <div class="text">
-      <p class="eyebrow">lifewithisha.com</p>
-      <h1>Isha Deo</h1>
-      <p class="role">Copywriter &amp; creative strategist</p>
-      <p class="soon"><strong>A new portfolio is brewing.</strong> Reels, campaigns and results from 3+ years and 40+ brands, landing here soon. Until then, say hi or grab my résumé.</p>
-      <div class="links">
-        <a class="btn btn-main" href="mailto:deoisha278@gmail.com">deoisha278@gmail.com</a>
-        <a class="btn" href="https://acrobat.adobe.com/id/urn:aaid:sc:US:94f46cd9-98df-4b9c-b922-6dc4150a30bd" target="_blank" rel="noopener">Résumé ↗</a>
-      </div>
+    <h1 class="visually-hidden">Isha Deo</h1>
+    <p class="soon">coming soon</p>
+    <div class="links">
+      <a class="btn" href="https://acrobat.adobe.com/id/urn:aaid:sc:US:94f46cd9-98df-4b9c-b922-6dc4150a30bd" target="_blank" rel="noopener">Résumé</a>
+      <a class="btn" href="mailto:deoisha278@gmail.com">Email</a>
     </div>
   </main>
   <script>
