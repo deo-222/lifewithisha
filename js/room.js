@@ -15,27 +15,28 @@ const ROOM = [
   { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, float: { rot: -6, dur: 7, delay: -1 },
     p: { hide: true } },
   { id: "question", src: "question", x: 491, bottom: 214, w: 38, aspect: 0.601, float: { rot: -10, dur: 6.8, delay: -2 },
-    p: { x: 1206, bottom: 1427, w: 34 } },
+    p: { x: 612, bottom: 330, w: 30 } },
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
     p: { hide: true } },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
-    p: { x: 618, bottom: 560, w: 80, h: 80 } },
+    p: { x: 1240, bottom: 505, w: 92, h: 92 } },
   { id: "star", html: "star", x: 200, bottom: 795, w: 56, h: 56, float: { rot: 12, dur: 5.5, delay: -2 },
-    p: { x: 1240, bottom: 540, w: 50, h: 50 } },
+    p: { x: 1215, bottom: 352, w: 40, h: 40 } },
   { id: "vinyl", src: "vinyl-midnights", x: 1330, bottom: 330, w: 210, aspect: 0.996, cls: "spin", float: { rot: 0, dur: 8, delay: -4 },
-    p: { x: 850, bottom: 1440, w: 190 } },
+    p: { x: 572, bottom: 455, w: 112 } },
   { id: "bulb", src: "bulb", x: 1262, bottom: 556, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
-    p: { x: 1245, bottom: 765, w: 30 } },
+    p: { x: 1272, bottom: 640, w: 32 } },
   { id: "megaphone", src: "megaphone", x: 1600, bottom: 470, w: 80, aspect: 1.014, float: { rot: -6, dur: 7.2, delay: -3.5 },
-    p: { x: 1144, bottom: 1217, w: 72 } },
+    p: { x: 1252, bottom: 790, w: 66 } },
 
   // ---- name + tagline, centred on the wall above the desk ----
   { id: "words", html: "words", x: 630, bottom: 378, w: 660, h: 300, k: 1,
-    p: { x: 640, bottom: 270, w: 640, h: 250, k: 0.8 } },
+    p: { x: 600, bottom: 352, w: 720, h: 232, k: 0.78 } },
 
   // ---- floor, back to front ----
   { id: "rug", src: "rug-persian", x: 490, bottom: 1076, w: 940, aspect: 3.791, cls: "rug" },
-  { id: "floorlamp", src: "lamp-red", x: 432, bottom: 905, w: 165, aspect: 0.276, shadow: 120, glow: true, cls: "lamp" },
+  { id: "floorlamp", src: "lamp-red", x: 432, bottom: 905, w: 165, aspect: 0.276, shadow: 120, glow: true, cls: "lamp",
+    p: { x: 572, bottom: 905, w: 118 } },
   { id: "desk", src: "desk-console", x: 700, bottom: 930, w: 520, aspect: 1.55, shadow: 560 },
 
   // ---- on the desk (surface at y ≈ 608) ----
@@ -122,7 +123,7 @@ function fitScene() {
   const vw = window.innerWidth, vh = window.innerHeight;
   let s, ox, oy;
   if (portrait()) {
-    s = Math.min(vw / 700, vh / 1500);
+    s = Math.min(vw / 800, vh / 1700);   // 800 canvas px across: desk, lamp and wall pieces all fit
     ox = vw / 2 - 960 * s; oy = 0;
   } else {
     s = Math.max(vw / CANVAS.w, vh / CANVAS.view);
