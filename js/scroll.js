@@ -156,7 +156,8 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     });
     if (c.querySelector(".case-stats")) gsap.from(c.querySelectorAll(".stat"), {   // results land like sticky notes being slapped on
       scale: 0.55, opacity: 0, rotation: () => gsap.utils.random(-14, 14), duration: 0.55, ease: "back.out(2.2)", stagger: 0.09,
-      scrollTrigger: { trigger: c.querySelector(".case-stats"), start: "top 85%" },
+      // replays every time the notes come into view, from above or below
+      scrollTrigger: { trigger: c.querySelector(".case-stats"), start: "top 85%", end: "bottom 15%", toggleActions: "restart none restart none" },
     });
     gsap.from(c.querySelectorAll(".pol"), {
       y: 50, opacity: 0, duration: 0.7, ease: "power2.out", stagger: 0.07,
@@ -174,7 +175,7 @@ mm.add("(prefers-reduced-motion: no-preference)", () => {
     scrollTrigger: { trigger: ".about-copy", start: "top 80%" } });
   gsap.from(".skill", {          // skills drop onto the wall one by one
     y: -70, opacity: 0, rotation: () => gsap.utils.random(-18, 18), duration: 0.6, ease: "back.out(1.8)", stagger: 0.06,
-    scrollTrigger: { trigger: ".skills", start: "top 82%" } });
+    scrollTrigger: { trigger: ".skills", start: "top 82%", end: "bottom 18%", toggleActions: "restart none restart none" } });   // replays on every pass
   gsap.from(".tools li", { y: 16, opacity: 0, duration: 0.4, stagger: 0.03, scrollTrigger: { trigger: ".tools", start: "top 90%" } });
 });
 
