@@ -225,9 +225,13 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
    Handoff: a copy of the Work heading the iMac screen dissolves into
    ========================================================================== */
 .handoff { position: absolute; inset: 0; z-index: 5; opacity: 0; visibility: hidden; background: var(--paper); pointer-events: none; }
-/* while the room is pinned, the Work section starts half a screen lower so its heading
-   lands exactly where the copy is when the pin lets go ((zoom length - 1) viewports) */
-.zoom-on .work { margin-top: 50vh; }
+/* the same copy on the iMac screen: a browser-sized page, shrunk to fit (scroll.js sets the size) */
+.screen-site { position: absolute; inset: 0; opacity: 0; background: var(--paper); pointer-events: none; }
+.screen-page { position: absolute; left: 50%; top: 50%; transform-origin: 50% 50%; }
+.handoff, .screen-page { padding: 0 clamp(16px, 5vw, 72px); }   /* same side padding as .work, so the pills wrap the same way */
+/* while the room is pinned, the Work section starts lower so its heading lands exactly
+   where the copy is when the pin lets go ((zoom length - 1) viewports) */
+.zoom-on .work { margin-top: calc((var(--zoom-len, 1.5) - 1) * 100vh); }
 
 /* ============================================================================
    Work

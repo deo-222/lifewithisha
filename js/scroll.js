@@ -1,7 +1,8 @@
 /* =============================================================================
    Scroll: room → Work → About → Contact
-   Desktop: the room pins while the camera pushes into the iMac; the screen fills the
-   browser and dissolves into the Work heading, then the page scrolls on normally.
+   Desktop: the room pins and Isha's photo holds on the iMac for a while; then the photo fades
+   into a small copy of the Work heading on the screen, and the camera pushes in until that
+   screen is the page itself, then the page scrolls on normally.
    Contact carries straight on from About on the same paper: the envelope rises in and the
    letter slides out of it as you scroll, then the megaphone floats in beside it.
    Phones: no pins, just a gentle push toward the screen as the room scrolls away.
@@ -9,10 +10,11 @@
    ========================================================================== */
 
 const ZOOM = {
-  length: 1.5,            // scroll distance of the zoom, in viewport heights
-  push: [0.08, 0.86],     // camera move (progress range)
-  fadeRoomText: [0, 0.2], // intro text + floating pieces leave first
-  dissolve: [0.8, 0.97],  // screen → Work heading
+  length: 2.6,            // scroll distance of the zoom, in viewport heights
+  swap: [0.28, 0.42],     // after a hold, the photo on the screen fades into the Work heading
+  fadeRoomText: [0.28, 0.42], // intro text + floating pieces leave with it
+  push: [0.42, 0.96],     // camera move (progress range)
+  dissolve: [0.95, 1],    // the screen, now browser-sized, hands over to the full-size copy
   phonePush: 0.3,         // phones only travel this far into the zoom
 };
 const OUTRO = {
@@ -30,13 +32,23 @@ ghost.removeAttribute("id");
 ghost.querySelectorAll("[id]").forEach((n) => n.removeAttribute("id"));
 ghost.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
 handoff.appendChild(ghost);
+// and a second copy lives on the iMac screen: laid out at browser size, shrunk by the camera's
+// final zoom, so when the camera arrives the screen shows exactly the page underneath it
+const site = document.createElement("div"), sitePage = document.createElement("div");
+site.className = "screen-site"; site.setAttribute("aria-hidden", "true");
+sitePage.className = "screen-page"; sitePage.appendChild(ghost.cloneNode(true));
+site.appendChild(sitePage);
+document.querySelector(".screen").appendChild(site);
+const photo = document.querySelector(".screen-pol");
+document.documentElement.style.setProperty("--zoom-len", ZOOM.length);
 
 // Camera: scale grows geometrically (feels like a steady push), and the screen's centre glides
 // from where it sits in the room to the middle of the browser. p = 0 is the room, 1 is screen-filling.
 const ease = (p) => (p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+const endScale = (vw, vh, r = screenRect()) => Math.max(vw / r.w, vh / r.h) * 1.02;   // screen covers the browser
 function camera({ s: s0, ox: ox0, oy: oy0, vw, vh }, p) {
   const r = screenRect(), cx = r.x + r.w / 2, cy = r.y + r.h / 2, e = ease(p);
-  const s1 = Math.max(vw / r.w, vh / r.h) * 1.02;                     // screen covers the browser
+  const s1 = endScale(vw, vh, r);
   const s = s0 * Math.pow(s1 / s0, e);
   const px = ox0 + cx * s0 + (vw / 2 - (ox0 + cx * s0)) * e;
   const py = oy0 + cy * s0 + (vh / 2 - (oy0 + cy * s0)) * e;
@@ -48,7 +60,12 @@ function applyZoom(p) {
   const v = camera(roomFit, p);
   setView(v.s, v.ox, v.oy);
 }
-window.addEventListener("roomfit", () => applyZoom(zoomP));
+function sizeSite() {
+  const { vw, vh } = roomFit;
+  Object.assign(sitePage.style, { width: `${vw}px`, height: `${vh}px`, transform: `translate(-50%, -50%) scale(${1 / endScale(vw, vh)})` });
+}
+sizeSite();
+window.addEventListener("roomfit", () => { sizeSite(); applyZoom(zoomP); });
 
 const range = ([a, b], p) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 const fading = () => document.querySelectorAll('.obj.float, .obj[data-id="words"]');
@@ -66,12 +83,14 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
       applyZoom(range(ZOOM.push, p));
       const t = range(ZOOM.fadeRoomText, p);
       fading().forEach((el) => { el.style.opacity = 1 - t; });
+      const w = range(ZOOM.swap, p);
+      site.style.opacity = w; photo.style.opacity = 1 - w;
       handoff.style.opacity = range(ZOOM.dissolve, p);
       handoff.style.visibility = p > 0 ? "visible" : "hidden";
     },
   });
   return () => {
-    st.kill(); applyZoom(0); handoff.style.opacity = 0;
+    st.kill(); applyZoom(0); handoff.style.opacity = 0; site.style.opacity = 0; photo.style.opacity = "";
     fading().forEach((el) => { el.style.opacity = ""; });
     document.documentElement.classList.remove("zoom-on");
   };
