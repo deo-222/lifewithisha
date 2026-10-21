@@ -73,7 +73,10 @@ const BULBS = [[0.03, 0.4], [0.163, 0.7], [0.312, 0.7], [0.456, 0.8], [0.633, 0.
 
 const $ = (s) => document.querySelector(s);
 const scene = $("#scene");
-const portrait = () => window.innerWidth / window.innerHeight < 1.1;
+// the room's visible size: the stage, not the window, so a classic scrollbar's width isn't counted
+const stage = $(".stage");
+const viewport = () => [stage.clientWidth, stage.clientHeight];
+const portrait = () => { const [w, h] = viewport(); return w / h < 1.1; };
 const els = [];   // { o, el, shadow }
 
 function make(o) {
@@ -136,7 +139,7 @@ function layout() {
 // Desktop: cover-fit the top 1920x1080 of the canvas.
 // Portrait (phones): fit ~700 canvas px across so the poster fits, and let the floor run down the screen.
 function fitScene() {
-  const vw = window.innerWidth, vh = window.innerHeight;
+  const [vw, vh] = viewport();
   let s, ox, oy;
   if (portrait()) {
     s = Math.min(vw / 800, vh / 1700);   // 800 canvas px across: desk, lamp and wall pieces all fit

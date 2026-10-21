@@ -12,10 +12,12 @@
 const ZOOM = {
   length: 1.6,            // scroll distance of the zoom, in viewport heights
   swap: [0.15, 0.3],      // after a short hold, the photo on the screen fades into the Work heading
-  fadeRoomText: [0.3, 0.55], // intro text + floating pieces stay until the camera moves, then fade as it pushes in
+  fadeRoomText: [0.3, 0.38], // intro text + floating pieces stay until the camera moves, then fade quickly as it
+                             // starts: their text and shadows are costly to redraw while the camera scales them
   push: [0.3, 0.92],      // camera move (progress range)
-  dissolve: [0.92, 0.96], // only once the camera has fully arrived does the full-size copy take over;
-                          // the last stretch is still, so the page never moves before the hand-off ends
+  dissolve: [0.92, 0.921], // once the camera has fully arrived, the full-size copy takes over in one step: the two
+                           // line up exactly, and a cross-fade would show both copies' slightly different letter
+                           // edges at once. The last stretch is still, so the page never moves before the hand-off.
   phonePush: 0.3,         // phones only travel this far into the zoom
 };
 const OUTRO = {
