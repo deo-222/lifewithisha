@@ -256,8 +256,14 @@ document.querySelectorAll(".rail").forEach((r) => { if (!trio || !trio.contains(
 // a little burst of glitter stars wherever someone clicks
 const STARS = [0, 1, 2, 3, 4, 5].map((i) => `assets/star-${i}.webp`);
 const calm = matchMedia("(prefers-reduced-motion: reduce)");
-document.addEventListener("pointerdown", (e) => {
-  if (calm.matches || e.button > 0) return;
+// only on a real tap or click: a touch that turns into a scroll is cancelled (or moves), so it doesn't sparkle
+let press = null;
+document.addEventListener("pointerdown", (e) => { press = { x: e.clientX, y: e.clientY, t: performance.now() }; }, { passive: true });
+document.addEventListener("pointercancel", () => { press = null; }, { passive: true });
+document.addEventListener("pointerup", (e) => {
+  const p = press; press = null;
+  if (!p || calm.matches || e.button > 0) return;
+  if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10 || performance.now() - p.t > 600) return;
   const n = 6 + Math.floor(Math.random() * 3);
   for (let i = 0; i < n; i++) {
     const s = document.createElement("img");

@@ -15,9 +15,9 @@ const ROOM = [
   { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, float: { rot: -6, dur: 7, delay: -1 },
     p: { hide: true } },
   { id: "question", src: "question", x: 491, bottom: 214, w: 38, aspect: 0.601, float: { rot: -10, dur: 6.8, delay: -2 },
-    p: { x: 612, bottom: 330, w: 30 } },
+    p: { x: 1282, bottom: 300, w: 26 } },
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
-    p: { hide: true } },
+    p: { x: 582, bottom: 262, w: 92, h: 92 } },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
     p: { x: 1240, bottom: 505, w: 92, h: 92 } },
   { id: "star", html: "star", x: 200, bottom: 795, w: 56, h: 56, float: { rot: 12, dur: 5.5, delay: -2 },
@@ -53,7 +53,7 @@ const ROOM = [
 
   // ---- on the floor ----
   { id: "cat", src: "cat-calico", x: 1065, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
-    p: { x: 644, bottom: 1200, w: 252 } },
+    p: { x: 760, bottom: 1046, w: 220 } },
 ];
 
 // bulb centres on the string-lights image (fractions of its width/height)
