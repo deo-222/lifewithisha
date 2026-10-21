@@ -10,10 +10,10 @@
    ========================================================================== */
 
 const ZOOM = {
-  length: 2.6,            // scroll distance of the zoom, in viewport heights
-  swap: [0.28, 0.42],     // after a hold, the photo on the screen fades into the Work heading
-  fadeRoomText: [0.28, 0.42], // intro text + floating pieces leave with it
-  push: [0.42, 0.96],     // camera move (progress range)
+  length: 1.6,            // scroll distance of the zoom, in viewport heights
+  swap: [0.15, 0.3],      // after a short hold, the photo on the screen fades into the Work heading
+  fadeRoomText: [0.3, 0.55], // intro text + floating pieces stay until the camera moves, then fade as it pushes in
+  push: [0.3, 0.96],      // camera move (progress range)
   dissolve: [0.95, 1],    // the screen, now browser-sized, hands over to the full-size copy
   phonePush: 0.3,         // phones only travel this far into the zoom
 };
