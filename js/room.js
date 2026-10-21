@@ -60,6 +60,12 @@ const ROOM = [
     p: { x: 1060, bottom: 1062, w: 200 } },   // on the rug, beside the chair
 ];
 
+// Pictures whose cast shadow is pre-rendered (assets/cast/), drawn with the same look as the CSS
+// drop shadows but without a live blur, which is costly to redraw while the camera zooms.
+// CAST_PAD is the margin those images carry around the object, in canvas px.
+const CAST = new Set(["books-row", "candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair", "lamp-red"]);
+const CAST_PAD = 48;
+
 // bulb centres on the string-lights image (fractions of its width/height)
 const BULBS = [[0.03, 0.4], [0.163, 0.7], [0.312, 0.7], [0.456, 0.8], [0.633, 0.66], [0.791, 0.7], [0.966, 0.4]];
 
@@ -76,6 +82,12 @@ function make(o) {
   el.dataset.id = o.id;
   if (o.float) el.style.cssText = `--rot:${o.float.rot}deg;--dur:${o.float.dur}s;--delay:${o.float.delay}s`;
   if (o.src) {
+    if (CAST.has(o.src)) {
+      const c = new Image(), h = o.w / o.aspect, px = (CAST_PAD / o.w) * 100, py = (CAST_PAD / h) * 100;
+      c.className = "cast"; c.src = `assets/cast/${o.src}.webp`; c.alt = ""; c.decoding = "async";
+      Object.assign(c.style, { left: `${-px}%`, top: `${-py}%`, width: `${100 + 2 * px}%`, height: `${100 + 2 * py}%` });
+      el.classList.add("baked"); el.appendChild(c);
+    }
     const i = new Image(); i.className = "pic"; i.src = `assets/${o.src}.webp`; i.alt = ""; i.decoding = "async";
     el.appendChild(i);
   } else {

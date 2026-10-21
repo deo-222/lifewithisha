@@ -27,6 +27,7 @@ img, video, iframe { display: block; max-width: 100%; }
 
 .obj { position: absolute; }
 .obj[hidden] { display: none; }
+.culled { visibility: hidden; }   /* pushed out of view by the zoom (scroll.js) */
 .obj > .pic { display: block; width: 100%; height: 100%; }
 /* studio shots warmed to sit in the sunlit room */
 /* light comes from the window on the right, so every shadow falls down and to the left */
@@ -40,6 +41,9 @@ img, video, iframe { display: block; max-width: 100%; }
 @keyframes breathe { 0%, 100% { transform: scale(1, 1); } 45% { transform: scale(1.005, 1.02); } }   /* a gentle rise, barely any growth */
 @media (prefers-reduced-motion: reduce) { .obj.cat > .pic { animation: none; } }
 .obj.lamp > .pic { filter: saturate(1.05) contrast(1.04) var(--cast); }   /* keep the lacquered red rich, not sepia */
+/* most pictures carry their cast shadow as a pre-rendered image (room.js), so no live drop shadow */
+.obj.baked { --cast: ; }
+.obj > .cast { position: absolute; max-width: none; pointer-events: none; }
 .obj.rug > .pic { filter: saturate(.75) sepia(.18) brightness(.97) drop-shadow(-2px 2px 2px rgba(60, 40, 22, .3)); opacity: .96; }   /* a flat rug only gets a thin edge shadow */
 .shadow {
   position: absolute; border-radius: 50%; pointer-events: none;

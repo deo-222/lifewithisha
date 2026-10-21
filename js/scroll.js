@@ -13,8 +13,9 @@ const ZOOM = {
   length: 1.6,            // scroll distance of the zoom, in viewport heights
   swap: [0.15, 0.3],      // after a short hold, the photo on the screen fades into the Work heading
   fadeRoomText: [0.3, 0.55], // intro text + floating pieces stay until the camera moves, then fade as it pushes in
-  push: [0.3, 0.96],      // camera move (progress range)
-  dissolve: [0.95, 1],    // the screen, now browser-sized, hands over to the full-size copy
+  push: [0.3, 0.92],      // camera move (progress range)
+  dissolve: [0.92, 0.96], // only once the camera has fully arrived does the full-size copy take over;
+                          // the last stretch is still, so the page never moves before the hand-off ends
   phonePush: 0.3,         // phones only travel this far into the zoom
 };
 const OUTRO = {
@@ -23,7 +24,20 @@ const OUTRO = {
   scrub: 1.2,             // seconds the animation takes to catch up with the scroll (higher = smoother)
 };
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+// Smooth scrolling: the page glides after the wheel or trackpad instead of stepping. Every scroll
+// animation below is tied to this smoothed position, so pins and animations always move together.
+// Touch screens keep their own native scrolling; reduced motion gets none.
+const smoother = matchMedia("(prefers-reduced-motion: reduce)").matches ? null
+  : ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1.1, smoothTouch: false });
+const scrollToY = (y) => (smoother ? smoother.scrollTo(y, true) : window.scrollTo({ top: y, behavior: "smooth" }));
+// in-page links (nav, case pills) glide to their section
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]'), t = a && document.querySelector(a.getAttribute("href"));
+  if (!t || !smoother) return;
+  e.preventDefault();
+  smoother.scrollTo(t, true, "top top");
+});
 const handoff = document.querySelector(".handoff");
 const workHead = document.querySelector("#work-head");
 // the screen dissolves into an exact copy of the Work heading, which then hands over to the real one
@@ -59,6 +73,19 @@ function applyZoom(p) {
   zoomP = p;
   const v = camera(roomFit, p);
   setView(v.s, v.ox, v.oy);
+  cull(v);
+}
+// The cut-outs' drop shadows are costly to redraw at every step of the zoom, so anything the
+// camera has pushed fully out of the browser is hidden until it comes back into view.
+function cull({ s, ox, oy }) {
+  const { vw, vh } = roomFit, pad = 60;   // canvas px of slack for shadows and floating pieces
+  for (const { el, shadow } of els) {
+    const x0 = ox + (el.offsetLeft - pad) * s, y0 = oy + (el.offsetTop - pad) * s;
+    const x1 = ox + (el.offsetLeft + el.offsetWidth + pad) * s, y1 = oy + (el.offsetTop + el.offsetHeight + pad) * s;
+    const out = x1 < 0 || y1 < 0 || x0 > vw || y0 > vh;
+    el.classList.toggle("culled", out);
+    if (shadow) shadow.classList.toggle("culled", out);
+  }
 }
 function sizeSite() {
   const { vw, vh } = roomFit;
@@ -77,12 +104,12 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
   document.documentElement.classList.add("zoom-on");
   const st = ScrollTrigger.create({
     trigger: ".stage", start: "top top", end: () => `+=${innerHeight * ZOOM.length}`,
-    pin: true, pinSpacing: false, scrub: 0.6, invalidateOnRefresh: true,
+    pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true,   // no extra lag: the smoother already smooths it
     onUpdate(self) {
       const p = self.progress;
       applyZoom(range(ZOOM.push, p));
       const t = range(ZOOM.fadeRoomText, p);
-      fading().forEach((el) => { el.style.opacity = 1 - t; });
+      fading().forEach((el) => { el.style.opacity = 1 - t; el.style.visibility = t >= 1 ? "hidden" : ""; });   // gone = not drawn
       const w = range(ZOOM.swap, p);
       site.style.opacity = w; photo.style.opacity = 1 - w;
       handoff.style.opacity = range(ZOOM.dissolve, p);
@@ -91,7 +118,7 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
   });
   return () => {
     st.kill(); applyZoom(0); handoff.style.opacity = 0; site.style.opacity = 0; photo.style.opacity = "";
-    fading().forEach((el) => { el.style.opacity = ""; });
+    fading().forEach((el) => { el.style.opacity = ""; el.style.visibility = ""; });
     document.documentElement.classList.remove("zoom-on");
   };
 });
@@ -147,14 +174,15 @@ function letterOut(scrollTrigger) {
 // for anyone who doesn't think to scroll: clicking the envelope glides the page to the point
 // where the letter is fully out, so the scroll and the letter stay in step
 env.querySelector(".env-open").addEventListener("click", () => {
-  if (letterST) window.scrollTo({ top: letterST.end + 2, behavior: "smooth" });
+  if (letterST) scrollToY(letterST.end + 2);
   else env.classList.add("is-open");   // reduced motion: no animation, the letter is already out
 });
 
 mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", () => {
-  envelopeIn({ trigger: stageC, start: "top bottom", end: "top top", scrub: OUTRO.scrub, invalidateOnRefresh: true });
+  const scrub = smoother ? true : OUTRO.scrub;   // with smooth scrolling, scrub lag would let the pin and the letter drift apart
+  envelopeIn({ trigger: stageC, start: "top bottom", end: "top top", scrub, invalidateOnRefresh: true });
   letterOut({ trigger: stageC, start: "top top", end: () => `+=${innerHeight * OUTRO.length}`,
-    pin: true, scrub: OUTRO.scrub, invalidateOnRefresh: true });
+    pin: true, scrub, invalidateOnRefresh: true });
 });
 // phones: no pin. Both play as the Contact screen scrolls up into view.
 mm.add("(max-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", () => {
