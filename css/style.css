@@ -1,0 +1,566 @@
+:root {
+  /* palette pulled from the room */
+  --ink: #2A211B;
+  --paper: #EFE6DA;      /* the wall in daylight */
+  --paper-2: #E6DACB;
+  --burgundy: #6B2129;   /* side table + lamp */
+  --pink: #F3C9D3;       /* sticky note / role pill */
+  --yellow: #F4DE7E;     /* sticky note */
+  /* handwriting: a light calligraphic italic (Cardo Italic, closest web match to the "tarragon" sample) */
+  --script: "Cardo", Georgia, serif;
+  --s: 1; --ox: 0px; --oy: 0px; /* set by room.js */
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--paper); color: var(--ink); }
+body { overflow-x: hidden; font: 400 17px/1.55 "Outfit", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+img, video, iframe { display: block; max-width: 100%; }
+
+.stage { position: relative; z-index: 2; width: 100%; height: 100vh; height: 100svh; overflow: hidden; background: #6B4A33; }   /* stays above Work while pinned */
+.scene {
+  position: absolute; left: 0; top: 0; width: 1920px; height: 1881px;
+  transform-origin: 0 0; transform: translate(var(--ox), var(--oy)) scale(var(--s));
+  opacity: 0; transition: opacity .6s ease;
+}
+.scene.is-ready { opacity: 1; }
+.room { position: absolute; left: 0; top: 0; width: 1920px; height: 1881px; }
+
+.obj { position: absolute; }
+.obj[hidden] { display: none; }
+.obj > .pic { display: block; width: 100%; height: 100%; }
+/* studio shots warmed to sit in the sunlit room */
+/* light comes from the window on the right, so every shadow falls down and to the left */
+.obj { --cast: drop-shadow(-16px 10px 12px rgba(55, 35, 18, .38)) drop-shadow(-4px 3px 3px rgba(55, 35, 18, .3)); }
+.obj > .pic { filter: saturate(.9) sepia(.1) brightness(1.01) var(--cast); }
+/* the cat photo is cool and over-bright: warm it into the room, keep its contrast so it doesn't look faded,
+   and ground it with a soft shadow where it touches the rug */
+.obj.cat > .pic { filter: brightness(.84) contrast(1.14) saturate(.98) sepia(.12) drop-shadow(-6px 6px 6px rgba(45, 28, 14, .38)) drop-shadow(-14px 10px 14px rgba(45, 28, 14, .18)); }
+.obj.lamp > .pic { filter: saturate(1.05) contrast(1.04) var(--cast); }   /* keep the lacquered red rich, not sepia */
+.obj.rug > .pic { filter: saturate(.75) sepia(.18) brightness(.97) drop-shadow(-2px 2px 2px rgba(60, 40, 22, .3)); opacity: .96; }   /* a flat rug only gets a thin edge shadow */
+.shadow {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(60, 38, 20, .48), rgba(60, 38, 20, 0));
+  transform: translateX(-6%);   /* contact shadows lean away from the window too */
+}
+.shadow[hidden] { display: none; }
+
+/* ---------- floating pieces ---------- */
+.float {
+  transform: rotate(var(--rot));
+  filter: drop-shadow(-14px 22px 14px rgba(60, 40, 22, .24)) drop-shadow(-3px 4px 4px rgba(60, 40, 22, .16));   /* floating off the wall, lit from the right */
+  animation: bob var(--dur) ease-in-out var(--delay) infinite alternate;
+}
+@keyframes bob {
+  from { transform: translateY(-9px) rotate(calc(var(--rot) - 1.2deg)); }
+  to   { transform: translateY(11px) rotate(calc(var(--rot) + 1.2deg)); }
+}
+
+/* ---------- iMac screen: a photo of Isha fills the display ---------- */
+.screen { position: absolute; overflow: hidden; background: #15110e; }
+.screen-pol { display: block; width: 100%; height: 100%; object-fit: cover; }
+.screen-glare { /* the glass reflection from the original photo */
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0) 62%, rgba(255, 255, 255, .13) 62.4%, rgba(255, 255, 255, .06) 100%);
+}
+
+/* ---------- name + tagline centred on the wall
+   fonts from the "what i'm obsessed creating lately" reference, one job each so it reads cleanly:
+   name in a rounded geometric sans (Outfit), role as a mono label on a pill (Space Mono),
+   tagline in a soft serif (DM Serif Display) ---------- */
+.words { --k: 1; text-shadow: -1px 2px 3px rgba(60, 40, 22, .16); display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; color: var(--ink); }
+.words p, .words h1 { margin: 0; }
+.words-name { font: 800 calc(var(--k) * 64px)/1 "Outfit", system-ui, sans-serif; letter-spacing: -.035em; }
+.words-role {
+  margin-top: calc(var(--k) * 16px) !important; padding: calc(var(--k) * 6px) calc(var(--k) * 16px);
+  border-radius: 999px; background: #F3C9D3;
+  font: 700 calc(var(--k) * 17px)/1.2 "Space Mono", ui-monospace, monospace; text-transform: lowercase; letter-spacing: -.01em;
+}
+.words-tagline { margin-top: calc(var(--k) * 22px) !important; font: 400 calc(var(--k) * 40px)/1.14 "DM Serif Display", Georgia, serif; }
+
+/* ---------- sticky notes + star ---------- */
+.note { container-type: size; padding: 0 6px; display: flex; align-items: center; justify-content: center; text-align: center; }
+.note-yellow { background: linear-gradient(160deg, #F8E58C, #EFD56A); }
+.note-pink   { background: linear-gradient(160deg, #F6C7CF, #EDB2BD); }
+.note p { margin: 12% 0 0; font: italic 400 17cqw/1.05 var(--script); color: var(--ink); }
+.tape { position: absolute; display: block; }
+.tape-n { width: 74px; left: 50%; top: -12px; transform: translateX(-50%) rotate(-4deg); }
+.star svg { display: block; width: 100%; height: 100%; }
+
+/* ---------- candle flicker ---------- */
+.glow, .flame { position: absolute; pointer-events: none; }
+.glow {
+  top: 2px; width: 420px; height: 420px; margin: -210px 0 0 -210px;
+  background: radial-gradient(closest-side, rgba(255, 205, 125, .9), rgba(255, 178, 92, .38) 28%, rgba(255, 160, 80, .1) 60%, rgba(255, 160, 80, 0));
+  mix-blend-mode: screen;
+  animation: glow 1.9s linear infinite;
+}
+.flame {
+  top: -9px; width: 8px; height: 17px; margin-left: -4px;
+  border-radius: 50% 50% 50% 50% / 64% 64% 36% 36%;
+  background: radial-gradient(ellipse at 50% 74%, #fff 0 20%, #FFE38F 40%, rgba(255, 150, 50, .9) 68%, rgba(255, 120, 40, 0));
+  box-shadow: 0 0 10px 3px rgba(255, 190, 90, .55);
+  transform-origin: 50% 100%;
+  animation: flame .9s ease-in-out infinite;
+}
+@keyframes flame {
+  0%, 100% { transform: scale(1, 1) skewX(0); }
+  15% { transform: scale(0.874, 1.2) skewX(5.4deg); }
+  35% { transform: scale(1.07, 0.874) skewX(-4.5deg); }
+  55% { transform: scale(0.91, 1.14) skewX(2.7deg); }
+  78% { transform: scale(1.04, 0.928) skewX(-3.6deg); }
+}
+/* irregular dips and swells so it reads as a real flame */
+@keyframes glow {
+  0%   { opacity: 0.91;  transform: scale(1); }
+  9%   { opacity: 0.505; transform: scale(0.91); }
+  14%  { opacity: 1;   transform: scale(1.05); }
+  27%  { opacity: 0.73;  transform: scale(0.964); }
+  33%  { opacity: 0.955; }
+  46%  { opacity: 0.415; transform: scale(0.892); }
+  52%  { opacity: 1;   transform: scale(1.07); }
+  68%  { opacity: 0.775; transform: scale(0.973); }
+  80%  { opacity: 0.595; transform: scale(0.937); }
+  88%  { opacity: 1;   transform: scale(1.04); }
+  100% { opacity: 0.91;  transform: scale(1); }
+}
+
+/* ---------- fairy lights: each bulb brightens and dims out of step ---------- */
+.lights { filter: drop-shadow(0 4px 4px rgba(60, 40, 22, .25)); }
+.twinkle {
+  position: absolute; width: var(--g, 96px); height: var(--g, 96px); margin: calc(var(--g, 96px) / -2) 0 0 calc(var(--g, 96px) / -2); border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 240, 180, 1), rgba(255, 205, 115, .55) 30%, rgba(255, 190, 100, 0));
+  mix-blend-mode: screen;
+  animation: twinkle var(--t) ease-in-out var(--d) infinite;
+}
+.twinkle::after { /* hot core over the bulb */
+  content: ""; position: absolute; left: 50%; top: 50%; width: 17%; height: 17%; margin: -8.5% 0 0 -8.5%; border-radius: 50%;
+  background: radial-gradient(closest-side, #fffbe8, rgba(255, 226, 150, .8) 55%, rgba(255, 210, 120, 0));
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 1; transform: scale(1.05); }
+  35% { opacity: .12; transform: scale(.6); }
+  50% { opacity: .2; transform: scale(.65); }
+  75% { opacity: .85; transform: scale(.95); }
+}
+
+/* ---------- floating bulb: a slow, gentle flicker (much calmer than the candle) ---------- */
+.bulbglow {
+  position: absolute; left: 50%; top: 36%; width: 260%; aspect-ratio: 1; transform: translate(-50%, -50%);
+  border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(255, 228, 140, .85), rgba(255, 205, 100, .3) 40%, rgba(255, 200, 100, 0));
+  mix-blend-mode: screen;
+  animation: bulbflicker 5.5s ease-in-out infinite;
+}
+@keyframes bulbflicker {
+  0%, 100% { opacity: .9; }
+  22% { opacity: .55; }
+  30% { opacity: .85; }
+  48% { opacity: .4; }
+  62% { opacity: .95; }
+  80% { opacity: .6; }
+}
+
+/* ---------- vinyl: slow spin while it floats ---------- */
+.spin > .pic { animation: spin 9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- floor lamp: warm pool of light on the wall ---------- */
+.lampglow { /* warm light spilling from under the mushroom shade */
+  position: absolute; left: 50%; top: 14%; width: 300px; height: 260px; margin-left: -150px; margin-top: -60px;
+  background: radial-gradient(closest-side, rgba(255, 196, 140, .32), rgba(255, 170, 120, 0));
+  mix-blend-mode: screen; pointer-events: none;
+}
+
+/* ---------- coffee steam ---------- */
+.steam {
+  position: absolute; left: 22%; bottom: 82%; width: 60%; height: auto; overflow: visible;
+  fill: none; stroke: rgba(255, 255, 255, .95); stroke-width: 4.3; stroke-linecap: round;
+  filter: blur(1.6px);
+}
+.steam path { opacity: 0; animation: steam 4.2s ease-in-out infinite; }
+.steam path:nth-child(2) { animation-delay: -1.4s; }
+.steam path:nth-child(3) { animation-delay: -2.8s; }
+@keyframes steam {
+  0%   { opacity: 0; transform: translateY(14px) scaleX(.8); }
+  30%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-34px) scaleX(1.25); }
+}
+
+/* ---------- light: soft sun from the right, warm fall-off at the edges ---------- */
+.light {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 60% at 100% 35%, rgba(255, 238, 205, .16), rgba(255, 238, 205, 0)),
+    radial-gradient(ellipse 120% 80% at 50% 40%, rgba(0, 0, 0, 0) 55%, rgba(50, 30, 15, .16));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float, .glow, .flame, .steam path, .twinkle, .bulbglow, .spin > .pic { animation: none; }
+  .steam path { opacity: .4; }
+}
+
+/* ============================================================================
+   Top nav
+   ========================================================================== */
+.topnav {
+  position: fixed; inset: 0 0 auto 0; z-index: 40; display: flex; justify-content: space-between; align-items: center;
+  padding: 16px clamp(16px, 3vw, 36px); pointer-events: none; transition: background .3s ease, box-shadow .3s ease;
+}
+.topnav.solid { background: var(--paper); box-shadow: 0 1px 0 rgba(42, 33, 27, .1); }   /* once the page is on paper */
+.topnav a { pointer-events: auto; text-decoration: none; }
+.wordmark { font: 800 21px/1 "Outfit", sans-serif; letter-spacing: -.035em; white-space: nowrap; }
+.topnav nav { display: flex; gap: 8px; }
+.topnav nav a {
+  font: 700 13px/1 "Space Mono", monospace; padding: 9px 14px; border-radius: 999px;
+  background: rgba(239, 230, 218, .82); backdrop-filter: blur(6px);
+}
+.topnav nav a:hover, .topnav nav a:focus-visible { background: var(--pink); }
+a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid var(--burgundy); outline-offset: 3px; }
+
+/* ============================================================================
+   Handoff: a copy of the Work heading the iMac screen dissolves into
+   ========================================================================== */
+.handoff { position: absolute; inset: 0; z-index: 5; opacity: 0; visibility: hidden; background: var(--paper); pointer-events: none; }
+/* while the room is pinned, the Work section starts half a screen lower so its heading
+   lands exactly where the copy is when the pin lets go ((zoom length - 1) viewports) */
+.zoom-on .work { margin-top: 50vh; }
+
+/* ============================================================================
+   Work
+   ========================================================================== */
+.work { position: relative; z-index: 1; background: var(--paper); padding: 0 clamp(16px, 5vw, 72px) 120px; }
+.pill {
+  display: inline-block; margin: 0; padding: 6px 14px; border-radius: 999px; background: var(--pink);
+  font: 700 14px/1.2 "Space Mono", monospace;   /* typed in lowercase; names like Isha keep their capital */
+}
+.work-head {
+  min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 96px 0 48px;
+}
+.work-title { margin: 22px 0 0; font: 400 clamp(44px, 6.4vw, 96px)/1.02 "DM Serif Display", Georgia, serif; letter-spacing: -.01em; max-width: 14ch; }
+.work-intro { margin: 22px 0 0; max-width: 46ch; font-size: clamp(16px, 1.3vw, 19px); opacity: .85; }
+.brand-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 30px; }
+.brand-nav a {
+  text-decoration: none; padding: 10px 16px; border-radius: 999px; border: 1.5px solid var(--ink);
+  font: 600 15px/1 "Outfit", sans-serif;
+}
+.brand-nav a:hover { background: var(--ink); color: var(--paper); }
+.scroll-cue { margin: 40px 0 0; font: 400 13px/1 "Space Mono", monospace; opacity: .6; }
+
+.case { max-width: 1180px; margin: 0 auto; padding: 72px 0 40px; border-top: 1.5px dashed rgba(42, 33, 27, .25); }
+.case-head .pill { background: var(--burgundy); color: var(--paper); }
+.case-name { margin: 16px 0 0; font: 800 clamp(34px, 4.4vw, 60px)/1 "Outfit", sans-serif; letter-spacing: -.04em; }
+.case-hook { margin: 12px 0 0; font: 400 clamp(24px, 2.6vw, 38px)/1.15 "DM Serif Display", Georgia, serif; max-width: 26ch; }
+.case-meta { margin: 16px 0 0; font: 400 13px/1.6 "Space Mono", monospace; opacity: .72; }
+
+/* the story: challenge / insight / idea as tabs, one at a time */
+.story { margin-top: 34px; max-width: 760px; }
+.story-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.story-tabs button {
+  padding: 9px 15px; border-radius: 999px; border: 1.5px solid var(--ink); background: transparent; color: var(--ink); cursor: pointer;
+  font: 700 13px/1 "Space Mono", monospace; text-transform: lowercase;
+}
+.story-tabs button[aria-selected="true"] { background: var(--burgundy); border-color: var(--burgundy); color: var(--paper); }
+.story-tabs button:hover:not([aria-selected="true"]) { background: var(--pink); }
+.story-panel { margin: 18px 0 0; font-size: clamp(17px, 1.4vw, 20px); line-height: 1.5; min-height: 4.5em; }
+.story-panel:not([hidden]) { animation: panel-in .35s ease; }
+@keyframes panel-in { from { opacity: 0; transform: translateY(6px); } }
+.label { margin: 0; font: 700 13px/1.2 "Space Mono", monospace; text-transform: lowercase; color: var(--burgundy); }
+
+/* results as sticky notes */
+.case-stats { display: flex; flex-wrap: wrap; gap: 18px; margin: 40px 0 0; padding: 0; }
+.stat {
+  position: relative; width: 158px; min-height: 146px; padding: 26px 14px 14px; display: flex; flex-direction: column; gap: 6px;
+  box-shadow: 0 10px 18px rgba(60, 40, 22, .14);
+}
+.stat::before { /* a strip of tape */
+  content: ""; position: absolute; left: 50%; top: -10px; width: 70px; height: 22px; transform: translateX(-50%) rotate(-3deg);
+  background: var(--tape, url("../assets/tape-kraft.webp")) center / 100% 100% no-repeat;
+}
+.stat:nth-child(odd) { transform: rotate(-2deg); }
+.stat:nth-child(even) { transform: rotate(1.8deg); }
+.stat-yellow { background: linear-gradient(160deg, #F8E58C, #EFD56A); }
+.stat-pink   { background: linear-gradient(160deg, #F6C7CF, #EDB2BD); }
+.stat dd { margin: 0; font: 800 30px/1 "Outfit", sans-serif; letter-spacing: -.03em; }
+.stat dt { font: italic 400 19px/1.15 var(--script); }
+.case-stats:has(.stat:only-child) .stat { width: 300px; }
+
+/* creatives as taped polaroids on a horizontal rail */
+.rail {
+  display: flex; gap: 26px; overflow-x: auto; margin: 44px calc(-1 * clamp(16px, 5vw, 72px)) 0; padding: 22px clamp(16px, 5vw, 72px) 30px;
+  scroll-snap-type: x proximity; scrollbar-width: thin;
+}
+.pol {
+  position: relative; flex: none; margin: 0; padding: 10px 10px 0; background: #FBF8F2; scroll-snap-align: start;
+  box-shadow: 0 2px 3px rgba(60, 40, 22, .18), 0 14px 24px rgba(60, 40, 22, .12);
+}
+.pol:nth-child(odd) { transform: rotate(-1.2deg); }
+.pol:nth-child(even) { transform: rotate(1deg); }
+.pol::before {
+  content: ""; position: absolute; left: 50%; top: -11px; width: 84px; height: 24px; z-index: 1; transform: translateX(-50%) rotate(2deg);
+  background: var(--tape, url("../assets/tape-kraft.webp")) center / 100% 100% no-repeat;
+}
+.pol figcaption { padding: 9px 4px 13px; font: italic 400 18px/1.15 var(--script); text-align: center; }
+.pol-reel video { width: 220px; aspect-ratio: 9 / 16; object-fit: cover; background: #1d1714; }
+.pol-square video { width: 300px; aspect-ratio: 1; }
+.pol-img img { width: 280px; height: auto; aspect-ratio: 1; object-fit: cover; }   /* height:auto beats the 900px height attribute */
+.pol-film iframe { width: 480px; aspect-ratio: 16 / 9; border: 0; background: #1d1714; }
+.reel-sound {
+  position: absolute; right: 18px; top: 18px; padding: 6px 10px; border: 0; border-radius: 999px; cursor: pointer;
+  background: rgba(239, 230, 218, .9); color: var(--ink); font: 700 11px/1 "Space Mono", monospace;
+}
+.reel-sound[aria-pressed="true"] { background: var(--pink); }
+
+.brand-nav a.ghost { border-style: dashed; }
+
+/* ---------- More work: lighter, compact entries ---------- */
+.more-head { max-width: 1180px; margin: 0 auto; padding: 120px 0 10px; text-align: center; border-top: 1.5px dashed rgba(42, 33, 27, .25); }
+.more-title { margin: 18px 0 0; font: 400 clamp(36px, 4.6vw, 68px)/1.05 "DM Serif Display", Georgia, serif; }
+.more-head .work-intro { margin-left: auto; margin-right: auto; }
+.compact { max-width: 1180px; margin: 0 auto; padding: 56px 0 0; }
+.compact > .pill { margin-bottom: 14px; background: var(--burgundy); color: var(--paper); }   /* numbered entries under Selected work */
+.compact-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+.compact-name { margin: 0; font: 800 clamp(26px, 2.8vw, 38px)/1.05 "Outfit", sans-serif; letter-spacing: -.035em; }
+.compact-head .case-meta { margin: 0; }
+.compact-hook { margin: 10px 0 0; max-width: 52ch; font: 400 clamp(19px, 1.8vw, 25px)/1.25 "DM Serif Display", Georgia, serif; }
+.compact-links { margin: 10px 0 0; font: 400 13px/1.6 "Space Mono", monospace; }
+.compact .rail { margin-top: 26px; }
+/* 05–07 side by side in one row; each card scrolls its own small rail */
+.trio {
+  max-width: 1180px; margin: 30px auto 0; padding-top: 64px; border-top: 1.5px dashed rgba(42, 33, 27, .25);
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px);
+}
+.trio .compact { margin: 0; padding: 0; min-width: 0; display: flex; flex-direction: column; }
+.trio .compact > .pill { align-self: flex-start; }
+.trio .compact-head { flex-direction: column; align-items: flex-start; gap: 6px; }
+.trio .compact-hook { font-size: clamp(17px, 1.4vw, 21px); }
+.trio .compact-links { font-size: 12px; }
+.trio .rail { margin: auto 0 0; padding: 26px 4px 24px; gap: 18px; }
+.trio .pol-reel video { width: 150px; }
+.trio .pol-square video, .trio .pol-img img { width: 190px; }
+.trio .pol figcaption { font-size: 16px; }
+
+/* ---------- Awards: taped index cards ---------- */
+.awards { max-width: 1180px; margin: 0 auto; padding: 120px 0 40px; text-align: center; }
+.award-list { list-style: none; margin: 44px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 30px 26px; text-align: left; }
+.award {
+  position: relative; padding: 26px 20px 20px; background: #FBF8F2; display: flex; flex-direction: column; gap: 6px;
+  box-shadow: 0 2px 3px rgba(60, 40, 22, .14), 0 12px 22px rgba(60, 40, 22, .1);
+}
+.award:nth-child(odd) { transform: rotate(-1deg); }
+.award:nth-child(even) { transform: rotate(.9deg); }
+.award::before {
+  content: ""; position: absolute; left: 50%; top: -10px; width: 74px; height: 22px; transform: translateX(-50%) rotate(-2deg);
+  background: var(--tape, url("../assets/tape-kraft.webp")) center / 100% 100% no-repeat;
+}
+.award strong { font: 800 22px/1.1 "Outfit", sans-serif; letter-spacing: -.03em; color: var(--burgundy); }
+.award span { font-size: 15px; line-height: 1.45; }
+
+/* ============================================================================
+   About: torn paper, taped polaroids, skills as sticky notes
+   ========================================================================== */
+.about { position: relative; z-index: 1; background: var(--paper-2); padding: 110px clamp(16px, 5vw, 72px) 40px; }   /* runs straight into Contact */
+.about::before { /* torn top edge */
+  content: ""; position: absolute; left: 0; right: 0; top: -38px; height: 70px;
+  background: url("../assets/tear-paper2.webp") center top / 2400px 70px repeat-x;
+}
+.about-inner { max-width: 1180px; margin: 0 auto; display: grid; grid-template-columns: minmax(260px, 5fr) 7fr; gap: clamp(32px, 6vw, 90px); align-items: start; }
+.about-title { margin: 18px 0 0; font: 400 clamp(38px, 4.6vw, 64px)/1.04 "DM Serif Display", Georgia, serif; }
+.about-lead { margin: 26px 0 0; font: italic 400 clamp(22px, 2.1vw, 29px)/1.35 var(--script); }   /* the calligraphic italic, so it reads apart from the heading */
+.about-copy > p:not(.pill):not(.about-lead) { margin: 18px 0 0; max-width: 62ch; }
+
+.skills-wrap { max-width: 1180px; margin: 90px auto 0; }
+.skills-wrap .pill { font-size: 14px; }
+.skills { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 26px 20px; }
+.skill {
+  position: relative; min-height: 120px; padding: 24px 14px 14px; display: flex; align-items: center;
+  font: 600 16px/1.25 "Outfit", sans-serif; box-shadow: 0 8px 16px rgba(60, 40, 22, .13);
+}
+.skill::before {
+  content: ""; position: absolute; left: 50%; top: -9px; width: 60px; height: 20px; transform: translateX(-50%) rotate(3deg);
+  background: var(--tape, url("../assets/tape-kraft.webp")) center / 100% 100% no-repeat;
+}
+.skill:nth-child(4n+1) { transform: rotate(-2deg); }
+.skill:nth-child(4n+2) { transform: rotate(1.5deg); }
+.skill:nth-child(4n+3) { transform: rotate(-1deg); }
+.skill:nth-child(4n)   { transform: rotate(2deg); }
+.skill-yellow { background: linear-gradient(160deg, #F8E58C, #EFD56A); }
+.skill-pink   { background: linear-gradient(160deg, #F6C7CF, #EDB2BD); }
+.skill-paper  { background: #FBF8F2; }
+.pill-tools { margin-top: 60px !important; }
+.tools { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.tools li { padding: 9px 15px; border-radius: 999px; border: 1.5px solid var(--ink); font: 400 14px/1 "Space Mono", monospace; }
+
+/* ============================================================================
+   Contact: carries straight on from About, same paper, with the envelope
+   ========================================================================== */
+.contact { position: relative; z-index: 1; background: var(--paper-2); }
+.contact-stage { position: relative; height: 100vh; height: 100svh; overflow: hidden; }
+.mega { position: absolute; z-index: 3; left: 0; top: 0; width: 110px; max-width: none; filter: drop-shadow(8px 14px 12px rgba(60, 40, 22, .25)); }
+/* envelope + letter: --ew is the envelope's width; the art is 561 x 655 (open flap included) */
+.envelope {
+  --ew: min(540px, 88vw, calc((100svh - 64px) * .74));
+  will-change: transform;
+  /* the envelope's bottom edge (below the seal) rests just out of frame, leaving room for the letter */
+  position: absolute; left: 50%; bottom: calc(var(--ew) * -.03); width: var(--ew); aspect-ratio: 561 / 655; transform: translateX(-50%);   /* scroll.js animates this */
+  filter: drop-shadow(0 22px 30px rgba(60, 40, 22, .28));
+}
+.env-back, .env-front { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
+.env-front { z-index: 2; pointer-events: none; }
+.letter-clip { /* the letter can rise as far as it likes, but never shows below the envelope */
+  position: absolute; z-index: 1; left: 14.4%; width: 71.3%; bottom: 0; height: 300%; overflow: hidden; pointer-events: none;
+  container-type: inline-size;   /* the letter's sizes (cqw) follow the letter's width */
+}
+.letter {
+  position: absolute; left: 0; right: 0; bottom: calc(var(--ew) * .098); pointer-events: auto;
+  padding: 8cqw 8cqw 74cqw;   /* the lower part sits inside the pocket */
+  background: var(--paper-2) linear-gradient(180deg, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0) 40%);   /* the About paper */
+  box-shadow: 0 0 0 1px rgba(42, 33, 27, .08), 0 -6px 18px rgba(60, 40, 22, .16); will-change: transform; color: var(--ink); text-align: center;
+  transform-origin: 30% 100%;
+}
+.letter-hi { margin: 0; font: italic 400 max(18px, 6.5cqw)/1 var(--script); }
+.letter-hi { text-align: left; }
+.contact-title { margin: 3cqw 0 0; font: 800 max(34px, 14cqw)/.95 "Outfit", sans-serif; letter-spacing: -.045em; }
+.contact-title span { display: inline-block; }
+.contact-text { margin: 4cqw auto 0; font: 400 max(14px, 4.5cqw)/1.32 "DM Serif Display", Georgia, serif; }
+.contact-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 2.4cqw; margin-top: 5cqw; }
+.btn {
+  display: inline-block; text-decoration: none; padding: max(9px, 2.6cqw) max(12px, 3.8cqw); border-radius: 999px; background: var(--pink); color: var(--ink);
+  font: 700 max(11px, 3.2cqw)/1 "Space Mono", monospace;
+}
+.btn-ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn:hover { transform: translateY(-2px); }
+.footer-note { position: absolute; left: 18px; bottom: 14px; margin: 0; z-index: 3; font: 400 12px/1 "Space Mono", monospace; opacity: .6; }
+
+@media (max-width: 960px) {
+  .trio { grid-template-columns: 1fr; gap: 56px; }
+  .trio .rail { margin: 22px calc(-1 * clamp(16px, 5vw, 72px)) 0; padding: 22px clamp(16px, 5vw, 72px) 26px; }
+}
+@media (max-width: 760px) {
+  .topnav { padding: 12px 12px; }
+  .wordmark { font-size: 18px; white-space: nowrap; }
+  .topnav nav { gap: 4px; }
+  .topnav nav a { font-size: 10.5px; padding: 7px 8px; }
+  .envelope { --ew: min(420px, 96vw); }
+  .about-inner { grid-template-columns: 1fr; }
+  .skill { flex-basis: calc(50% - 10px); }
+  .stat { width: calc(50% - 9px); min-height: 130px; }
+  .stat dd { font-size: 24px; }
+  .pol-reel video { width: 180px; }
+  .pol-img img { width: 230px; }
+  .pol-film iframe { width: 300px; }
+}
+
+/* ============================================================================
+   Uniform, centred layout: every section uses the same column, spacing and alignment.
+   Rows that don't fill up (awards, skills, stats, rails) centre their last line.
+   ========================================================================== */
+:root { --section-gap: 96px; }
+.rail { align-items: flex-start; scroll-padding-inline: clamp(16px, 5vw, 72px); }   /* polaroids keep their own height */
+.rail > :first-child { margin-left: auto; }   /* centres short rows; long rows still scroll from the start */
+.rail > :last-child { margin-right: auto; }   /* polaroids keep their own height; short rails sit centred */
+.case, .compact, .more-head, .awards { text-align: center; }
+.case { padding: var(--section-gap) 0 24px; }
+.case-hook, .compact-hook { margin-left: auto; margin-right: auto; }
+.story { margin: 30px auto 0; max-width: 640px; }
+.story-tabs { justify-content: center; }
+.story-panel { min-height: 0; }
+.case-stats { justify-content: center; }
+.compact { padding-top: var(--section-gap); }
+.case + .compact { margin-top: 30px; border-top: 1.5px dashed rgba(42, 33, 27, .25); }
+.compact-head { flex-direction: column; align-items: center; gap: 6px; }
+.trio { padding-top: var(--section-gap); text-align: center; }
+.trio .compact { align-items: center; }
+.trio .rail { align-self: stretch; }   /* the strip spans the card; only its contents centre */
+.trio .compact > .pill { align-self: center; }
+.trio .compact-head { align-items: center; }
+.more-head, .awards { padding-top: calc(var(--section-gap) * 1.25); }
+.award-list { display: flex; flex-wrap: wrap; justify-content: center; }
+.award { flex: 0 1 260px; }
+/* About: one centred column, polaroids above the copy */
+.about { padding-top: calc(var(--section-gap) * 1.1); padding-bottom: 0; text-align: center; }
+.about-inner { grid-template-columns: 1fr; max-width: 760px; gap: 26px; }
+.about-copy > p:not(.pill):not(.about-lead) { margin-left: auto; margin-right: auto; text-align: left; }   /* long paragraphs stay left-aligned so they read easily */
+.about-lead { max-width: 30ch; margin-left: auto; margin-right: auto; }
+.skills-wrap { text-align: center; margin-top: var(--section-gap); }
+.skills { display: flex; flex-wrap: wrap; justify-content: center; }
+.skill { flex: 0 1 170px; text-align: left; }
+.tools { justify-content: center; }
+
+/* ---------- scroll hint for strips wider than the screen ---------- */
+.rail-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 4px; }
+.trio + .rail-nav { max-width: 1180px; margin: 6px auto 0; }   /* one shared control under 06–08 */
+.rail-nav[hidden] { display: none; }
+.rail-hint { font: 400 12px/1 "Space Mono", monospace; opacity: .7; }
+.rail-btn {
+  width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink);
+  font: 700 16px/1 "Outfit", sans-serif; cursor: pointer; transition: background .2s, opacity .2s;
+}
+.rail-btn:hover:not(:disabled) { background: var(--pink); }
+.rail-btn:disabled { opacity: .3; cursor: default; }
+/* soft fade on whichever edge still has more to see */
+.rail.more-right { -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); }
+.rail.more-left { -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%); mask-image: linear-gradient(90deg, transparent, #000 15%); }
+.rail.more-left.more-right { -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+@media (prefers-reduced-motion: no-preference) {
+  .rail-nav.untouched .rail-btn[data-dir="1"] { animation: nudge 1.6s ease-in-out infinite; }
+}
+@keyframes nudge { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+
+/* ---------- 06 / 07 / 08: a dashed divider between the three cards ---------- */
+.trio { gap: 0; }
+.trio .compact { padding: 0 clamp(14px, 2vw, 28px); }
+.trio .compact + .compact { border-left: 1.5px dashed rgba(42, 33, 27, .3); }
+@media (max-width: 960px) {
+  .trio .compact { padding: 0; }
+  .trio .compact + .compact { border-left: 0; border-top: 1.5px dashed rgba(42, 33, 27, .3); margin-top: 48px; padding-top: 48px; }
+}
+
+/* ---------- About: one small taped polaroid ---------- */
+.about-pic { position: relative; width: 170px; margin: 0 auto; transform: rotate(-3deg); }
+.about-pol { display: block; width: 100%; height: auto; filter: drop-shadow(0 4px 6px rgba(60, 40, 22, .25)) drop-shadow(0 14px 22px rgba(60, 40, 22, .12)); }
+.about-tape { width: 92px; left: 50%; top: -14px; transform: translateX(-50%) rotate(4deg); }
+
+/* ---------- tapes: three kinds mixed, and never the pink gingham on anything pink ---------- */
+:root {
+  --tape-kraft: url("../assets/tape-kraft.webp");
+  --tape-gingham: url("../assets/tape-gingham.webp");
+  --tape-cream: url("../assets/tape-cream.webp");
+}
+.pol:nth-child(3n+1), .award:nth-child(3n+1) { --tape: var(--tape-kraft); }
+.pol:nth-child(3n+2), .award:nth-child(3n+2) { --tape: var(--tape-gingham); }
+.pol:nth-child(3n),   .award:nth-child(3n)   { --tape: var(--tape-cream); }
+.stat-yellow, .skill-yellow { --tape: var(--tape-gingham); }
+.stat-pink:nth-child(4n+2), .skill-pink:nth-child(odd) { --tape: var(--tape-kraft); }
+.stat-pink:nth-child(4n), .skill-pink:nth-child(even) { --tape: var(--tape-cream); }
+.skill-paper { --tape: var(--tape-kraft); }
+.pol::before, .stat::before, .award::before, .skill::before { opacity: .95; }
+
+/* ---------- glitter stars on click ---------- */
+.click-star {
+  --shine: 1;
+  position: fixed; z-index: 100; pointer-events: none; height: auto; max-width: none; will-change: transform, opacity, filter;
+  filter: brightness(var(--shine)) saturate(.85) drop-shadow(0 0 2px rgba(255, 225, 235, .9)) drop-shadow(0 0 5px rgba(240, 190, 205, .45));   /* soft, dusty pink glow */
+}
+.click-glint { /* a white four-point sparkle */
+  position: fixed; z-index: 101; pointer-events: none; background: #fff;
+  clip-path: polygon(50% 0, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0 50%, 40% 40%);
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, .9)) drop-shadow(0 0 6px rgba(245, 215, 225, .6));
+}
+
+/* ---------- envelope: click to open ---------- */
+.env-open { /* invisible hit area over the pocket */
+  position: absolute; z-index: 3; left: 4%; right: 4%; bottom: 3%; height: 44%;
+  border: 0; padding: 0; background: transparent; cursor: pointer;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.env-hint {
+  margin-bottom: 30%; padding: 6px 12px; border-radius: 999px; background: rgba(251, 248, 242, .85); color: var(--ink);
+  font: 700 12px/1 "Space Mono", monospace; transition: opacity .3s ease;
+  animation: hint-bob 1.8s ease-in-out infinite;
+}
+.envelope.is-open .env-hint { opacity: 0; }
+.envelope.is-open .env-open { pointer-events: none; }   /* once open, the letter's own buttons take the clicks */
+.env-open:focus-visible .env-hint { outline: 3px solid var(--burgundy); outline-offset: 2px; }
+@keyframes hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@media (prefers-reduced-motion: reduce) { .env-hint { animation: none; } }

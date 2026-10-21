@@ -3,195 +3,505 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="color-scheme" content="light">
-  <title>Isha Deo · Coming soon</title>
-  <meta name="description" content="Isha Deo, copywriter and creative strategist. A new portfolio is on its way.">
-  <meta property="og:title" content="Isha Deo · Coming soon">
-  <meta property="og:description" content="Copywriter and creative strategist. A new portfolio is on its way.">
-  <meta property="og:type" content="website">
+  <title>Isha Deo · Marketing &amp; creative strategy</title>
+  <meta name="description" content="Isha Deo, marketing and creative strategist. Telling stories with strategy. Building content that connects.">
+  <meta property="og:title" content="Isha Deo · Marketing &amp; creative strategy">
+  <meta property="og:description" content="Telling stories with strategy. Building content that connects.">
+  <meta property="og:image" content="https://lifewithisha.com/assets/share.jpg">
   <meta property="og:url" content="https://lifewithisha.com/">
-  <meta property="og:image" content="https://lifewithisha.com/assets/coming-soon/share.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Isha Deo as a die-cut sticker on watercolour paper, surrounded by neon doodles and animal-print stars">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://lifewithisha.com/assets/coming-soon/share.jpg">
-  <link rel="canonical" href="https://lifewithisha.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500&family=Permanent+Marker&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --paper: #f6f1e8;
-      --ink: #1b1918;
-      --pink: #ff2bd6;
-      --orange: #ff7a00;
-      --lime: #8fe000;
-      --cyan: #00bfff;
-      --violet: #8a2bff;
-      --red: #ff2e5b;
-    }
-    * { box-sizing: border-box; }
-    html { min-height: 100%; background: var(--paper) url("assets/coming-soon/paper.jpg") center / cover fixed; }
-    body {
-      margin: 0; min-height: 100vh; color: var(--ink); background: transparent;
-      font: 400 17px/1.55 "Inter Tight", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
-      display: grid; place-items: center; padding: 24px 16px;
-    }
-    main { display: flex; flex-direction: column; align-items: center; gap: 22px; text-align: center; }
-    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-    /* Stage: cutout + doodles + star stickers share one coordinate system */
-    .stage { width: min(320px, 70vw, 46vh); aspect-ratio: 4 / 5; }
-    .stage svg { width: 100%; height: 100%; overflow: visible; display: block; }
-    .me { animation: settle 1s cubic-bezier(.2,.8,.2,1) both; transform-origin: 500px 1000px; }
-    .doodles path, .doodles circle {
-      fill: none; stroke: var(--c, var(--pink)); stroke-width: 9; stroke-linecap: round; stroke-linejoin: round;
-      stroke-dasharray: 1; stroke-dashoffset: 1;
-      animation: draw var(--t, .8s) cubic-bezier(.6,.1,.3,1) forwards;
-      animation-delay: calc(.6s + var(--d, 0s));
-    }
-    .doodles .thin { stroke-width: 6.5; }
-    .sticker {
-      transform-box: fill-box; transform-origin: center;
-      opacity: 0; animation: pop .55s cubic-bezier(.3,1.6,.5,1) forwards, wiggle 1.6s steps(4) infinite;
-      animation-delay: var(--d, 1s), calc(var(--d, 1s) + .6s);
-      filter: drop-shadow(0 6px 6px rgba(60, 40, 30, .18));
-    }
-    .scribble-name {
-      font-family: "Permanent Marker", cursive; font-size: 118px; fill: var(--pink);
-      opacity: 0; animation: fade .5s ease-out forwards; animation-delay: 4.3s;
-    }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
-    @keyframes fade { to { opacity: 1; } }
-    @keyframes pop { 0% { opacity: 0; transform: scale(.2) rotate(-25deg); } 100% { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); } }
-    @keyframes wiggle {
-      0%   { transform: scale(1) rotate(var(--r, 0deg)); }
-      25%  { transform: scale(1.03) rotate(calc(var(--r, 0deg) + 4deg)); }
-      50%  { transform: scale(1) rotate(calc(var(--r, 0deg) - 2deg)); }
-      75%  { transform: scale(1.02) rotate(calc(var(--r, 0deg) + 2deg)); }
-      100% { transform: scale(1) rotate(var(--r, 0deg)); }
-    }
-    @keyframes settle { from { opacity: 0; transform: translateY(18px) scale(.97); } to { opacity: 1; transform: none; } }
-
-    .soon { margin: 6px 0 0; font: italic 400 clamp(30px, 4vw, 40px)/1 "Instrument Serif", Georgia, serif; letter-spacing: .01em; }
-    .links { display: flex; gap: 12px; }
-    .btn {
-      display: inline-block; min-width: 128px; padding: 12px 24px; border-radius: 999px;
-      font: 500 15px/1.2 "Inter Tight", system-ui, sans-serif; text-decoration: none;
-      color: #fff; background: var(--pink); border: 2px solid var(--pink);
-      box-shadow: 0 0 0 0 rgba(255, 43, 214, .5), 0 8px 22px rgba(255, 43, 214, .35);
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-    .btn:hover { transform: translateY(-2px) rotate(-1.5deg); box-shadow: 0 0 0 6px rgba(255, 43, 214, .18), 0 10px 26px rgba(255, 43, 214, .45); }
-    .btn:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
-    @media (prefers-reduced-motion: reduce) {
-      .me, .scribble-name { animation: none; opacity: 1; }
-      .doodles path, .doodles circle { animation: none; stroke-dashoffset: 0; }
-      .sticker { animation: none; opacity: 1; transform: rotate(var(--r, 0deg)); }
-      .btn { transition: none; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;800&family=Cardo:ital@1&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <header class="topnav">
+    <a class="wordmark" href="#top">Isha Deo</a>
+    <nav aria-label="Main"><a href="#work">work</a><a href="#about">about</a><a href="#contact">contact</a><a href="assets/Isha_Deo_Resume.pdf" target="_blank" rel="noopener">resume</a></nav>
+  </header>
+
   <main>
-    <div class="stage">
-      <svg viewBox="0 0 1000 1250" role="img" aria-labelledby="pic-title">
-        <title id="pic-title">Isha Deo, black and white cutout on watercolour paper, surrounded by neon doodles of coffee, a cat, a pencil and a flower, and animal-print star stickers</title>
-        <defs>
-          <filter id="boil" x="-5%" y="-5%" width="110%" height="110%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="1" result="n">
-              <animate class="boil-anim" attributeName="seed" values="1;3;5;7" dur="0.5s" calcMode="discrete" repeatCount="indefinite"/>
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="5"/>
-          </filter>
-          <pattern id="zebra" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="assets/coming-soon/tex-zebra.jpg" width="1" height="1" preserveAspectRatio="xMidYMid slice"/></pattern>
-          <pattern id="leopard" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="assets/coming-soon/tex-leopard.jpg" width="1" height="1" preserveAspectRatio="xMidYMid slice"/></pattern>
-          <pattern id="cheetah" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="assets/coming-soon/tex-cheetah.jpg" width="1" height="1" preserveAspectRatio="xMidYMid slice"/></pattern>
-          <pattern id="snow" patternContentUnits="objectBoundingBox" width="1" height="1"><image href="assets/coming-soon/tex-snow.jpg" width="1" height="1" preserveAspectRatio="xMidYMid slice"/></pattern>
-          <!-- shapes, centred on 0,0, radius 50 -->
-          <path id="star5" d="M0 -50 L12 -16 L48 -15 L19 7 L29 42 L0 21 L-29 42 L-19 7 L-48 -15 L-12 -16 Z"/>
-          <path id="burst8" d="M0 -50 L11 -22 L35 -35 L25 -10 L50 0 L25 10 L35 35 L11 22 L0 50 L-11 22 L-35 35 L-25 10 L-50 0 L-25 -10 L-35 -35 L-11 -22 Z"/>
-          <path id="burst10" d="M0 -50 L9 -24 L29 -40 L24 -13 L48 -15 L29 4 L48 15 L24 13 L29 40 L9 24 L0 50 L-9 24 L-29 40 L-24 13 L-48 15 L-29 4 L-48 -15 L-24 -13 L-29 -40 L-9 -24 Z"/>
-        </defs>
+  <section class="stage" id="top" aria-label="Isha's room">
+    <!-- The room is a 1920-wide canvas; js/room.js places every object from the ROOM config. -->
+    <div class="scene" id="scene"></div>
+    <!-- scroll.js fills this with a copy of the Work heading: the iMac screen dissolves into it at the end of the zoom -->
+    <div class="handoff" aria-hidden="true"></div>
+  </section>
 
-        <image class="me" href="assets/coming-soon/isha-cutout.webp" x="79" y="266" width="842" height="984"/>
+  <section class="work" id="work" aria-labelledby="work-title">
+    <header class="work-head" id="work-head">
+      <p class="pill">selected work</p>
+      <h2 class="work-title" id="work-title">Cases from brief to result.</h2>
+      <p class="work-intro">Brands I've helped find their voice, and what happened next.</p>
+      <nav class="brand-nav" aria-label="Case studies">
+        <a href="#rutgers">Rutgers NB &amp; Careers</a><a href="#sos">SOS Children's Villages</a><a href="#rambandhu">Ram Bandhu</a><a href="#western">Western Equipments</a><a href="#sigvaris">Sigvaris Novomed</a><a href="#betterflour">The Better Flour</a><a href="#skincare">Sukin &amp; G&amp;M</a><a href="#inicio">Inicio</a><a class="ghost" href="#more-work">More work</a>
+      </nav>
+      <p class="scroll-cue" aria-hidden="true">scroll ↓</p>
+    </header>
+      <article class="case" id="rutgers">
+        <header class="case-head">
+          <p class="pill">01</p>
+          <h3 class="case-name">Rutgers NB &amp; Careers</h3>
+          <p class="case-hook">University pages that students actually wanted to follow.</p>
+          <p class="case-meta"><span>Rutgers University</span> · <span>Social strategy, short-form video, event campaigns</span> · <span>In-house</span></p>
+        </header>
+        <div class="story">
+          <div class="story-tabs" role="tablist" aria-label="The story"><button type="button" role="tab" id="rutgers-tab0" aria-controls="rutgers-panel0" aria-selected="true">the challenge</button><button type="button" role="tab" id="rutgers-tab1" aria-controls="rutgers-panel1" aria-selected="false" tabindex="-1">the insight</button><button type="button" role="tab" id="rutgers-tab2" aria-controls="rutgers-panel2" aria-selected="false" tabindex="-1">the idea</button></div>
+          <p class="story-panel" role="tabpanel" id="rutgers-panel0" aria-labelledby="rutgers-tab0">Rutgers Careers' social needed new energy and 1,000+ new followers in 30 days, ahead of a career fair for 6,000+ students.</p>
+          <p class="story-panel" role="tabpanel" id="rutgers-panel1" aria-labelledby="rutgers-tab1" hidden>Students scroll past career advice, but they stop for people, places and trends they recognise.</p>
+          <p class="story-panel" role="tabpanel" id="rutgers-panel2" aria-labelledby="rutgers-tab2" hidden>Trend-led short-form video: trending audio, quick visual hooks and familiar campus faces, carrying the fair and practical tips like an internship-prep cheat sheet.</p>
+        </div>
+        <dl class="case-stats" aria-label="Results">
+            <div class="stat stat-yellow"><dd>8.9K → 10K+</dd><dt>Instagram followers</dt></div>
+            <div class="stat stat-pink"><dd>+146%</dd><dt>reach</dt></div>
+            <div class="stat stat-yellow"><dd>+446%</dd><dt>views</dt></div>
+            <div class="stat stat-pink"><dd>6,000+</dd><dt>career fair attendees</dt></div>
+        </dl>
+        <div class="rail" tabindex="0" aria-label="Rutgers NB &amp; Careers: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rutgers-careers-2.mp4" poster="assets/reels/rutgers-careers-2.jpg" muted loop playsinline preload="none" aria-label="The handshake"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>The handshake</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rutgers-nb-3.mp4" poster="assets/reels/rutgers-nb-3.jpg" muted loop playsinline preload="none" aria-label="Friendsgiving POV"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Friendsgiving POV</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rutgers-careers-6.mp4" poster="assets/reels/rutgers-careers-6.jpg" muted loop playsinline preload="none" aria-label="Internship prep cheat sheet"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Internship prep cheat sheet</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rutgers-nb-1.mp4" poster="assets/reels/rutgers-nb-1.jpg" muted loop playsinline preload="none" aria-label="Game day"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Game day</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="case" id="sos">
+        <header class="case-head">
+          <p class="pill">02</p>
+          <h3 class="case-name">SOS Children's Villages</h3>
+          <p class="case-hook">No faces allowed. So we drew the other side.</p>
+          <p class="case-meta"><span>SOS Children's Villages of India</span> · <span>Campaign copy, creative strategy, paid media copy, SEO content</span> · <span>Digichefs</span></p>
+        </header>
+        <div class="story">
+          <div class="story-tabs" role="tablist" aria-label="The story"><button type="button" role="tab" id="sos-tab0" aria-controls="sos-panel0" aria-selected="true">the challenge</button><button type="button" role="tab" id="sos-tab1" aria-controls="sos-panel1" aria-selected="false" tabindex="-1">the insight</button><button type="button" role="tab" id="sos-tab2" aria-controls="sos-panel2" aria-selected="false" tabindex="-1">the idea</button></div>
+          <p class="story-panel" role="tabpanel" id="sos-panel0" aria-labelledby="sos-tab0">Raise awareness and donations for an NGO that, by government directive, cannot show photographs of children.</p>
+          <p class="story-panel" role="tabpanel" id="sos-panel1" aria-labelledby="sos-tab1" hidden>In March, people are already deciding where their money goes. Tax season is when giving feels most possible.</p>
+          <p class="story-panel" role="tabpanel" id="sos-panel2" aria-labelledby="sos-tab2" hidden>#TheOtherSide: illustrated stories setting everyday privilege beside the untold stories of children without it. Teasers built curiosity, a brand film told the full story, and paid media carried it further.</p>
+        </div>
+        <dl class="case-stats" aria-label="Results">
+            <div class="stat stat-yellow"><dd>11M</dd><dt>impressions</dt></div>
+            <div class="stat stat-pink"><dd>7.1M</dd><dt>reach</dt></div>
+            <div class="stat stat-yellow"><dd>₹32 lakh</dd><dt>donations raised</dt></div>
+            <div class="stat stat-pink"><dd>+49.71%</dd><dt>organic growth from SEO</dt></div>
+        </dl>
+        <div class="rail" tabindex="0" aria-label="SOS Children's Villages: reels and creatives">
+          <figure class="pol pol-img">
+            <img src="assets/img/sos-1.jpg" alt="#TheOtherSide: there's always another side to every story" loading="lazy" width="900" height="900">
+            <figcaption>#TheOtherSide</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/sos-2.jpg" alt="#TheOtherSide: things in the mirror are not what they seem" loading="lazy" width="900" height="900">
+            <figcaption>Things in the mirror</figcaption>
+          </figure>
+          <figure class="pol pol-film">
+            <iframe src="https://www.youtube-nocookie.com/embed/7OuQBfI-ofQ" title="#TheOtherSide campaign film" loading="lazy" allow="encrypted-media; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            <figcaption>#TheOtherSide campaign film</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="case" id="rambandhu">
+        <header class="case-head">
+          <p class="pill">03</p>
+          <h3 class="case-name">Ram Bandhu</h3>
+          <p class="case-hook">A heritage spice brand, 30M impressions louder.</p>
+          <p class="case-meta"><span>Ram Bandhu</span> · <span>Social copy, creative strategy, festive and topical content</span> · <span>Digichefs</span></p>
+        </header>
+        <div class="story">
+          <div class="story-tabs" role="tablist" aria-label="The story"><button type="button" role="tab" id="rambandhu-tab0" aria-controls="rambandhu-panel0" aria-selected="true">the challenge</button><button type="button" role="tab" id="rambandhu-tab1" aria-controls="rambandhu-panel1" aria-selected="false" tabindex="-1">the insight</button><button type="button" role="tab" id="rambandhu-tab2" aria-controls="rambandhu-panel2" aria-selected="false" tabindex="-1">the idea</button></div>
+          <p class="story-panel" role="tabpanel" id="rambandhu-panel0" aria-labelledby="rambandhu-tab0">A brand trusted in 5 million kitchens needed to feel current, not just familiar, on social.</p>
+          <p class="story-panel" role="tabpanel" id="rambandhu-panel1" aria-labelledby="rambandhu-tab1" hidden>Ram Bandhu doesn't live on a shelf. It lives in family moments: festivals, mum's kitchen, siblings fighting over the last papad.</p>
+          <p class="story-panel" role="tabpanel" id="rambandhu-panel2" aria-labelledby="rambandhu-tab2" hidden>Festive, topical and regional-language content plus relatable everyday humour, refreshed across Facebook, Instagram, LinkedIn and Twitter.</p>
+        </div>
+        <dl class="case-stats" aria-label="Results">
+            <div class="stat stat-yellow"><dd>+30M</dd><dt>impressions in 12 months</dt></div>
+            <div class="stat stat-pink"><dd>+20M</dd><dt>on Facebook</dt></div>
+            <div class="stat stat-yellow"><dd>7x</dd><dt>LinkedIn impressions</dt></div>
+            <div class="stat stat-pink"><dd>e4m</dd><dt>Maverick Awards nomination</dt></div>
+        </dl>
+        <div class="rail" tabindex="0" aria-label="Ram Bandhu: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rambandhu-1.mp4" poster="assets/reels/rambandhu-1.jpg" muted loop playsinline preload="none" aria-label="Christmas"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Christmas</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rambandhu-2.mp4" poster="assets/reels/rambandhu-2.jpg" muted loop playsinline preload="none" aria-label="New Year"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>New Year</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/rambandhu-3.mp4" poster="assets/reels/rambandhu-3.jpg" muted loop playsinline preload="none" aria-label="Ganeshotsav"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Ganeshotsav</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/rambandhu-1.jpg" alt="Mango pickle post featuring Madhuri Dixit" loading="lazy" width="900" height="900">
+            <figcaption>Mango pickle</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="compact" id="western">
+        <p class="pill">04</p>
+        <header class="compact-head">
+          <h3 class="compact-name">Western Equipments</h3>
+          <p class="case-meta">B2B · Social and SEO content · Digichefs</p>
+        </header>
+        <p class="compact-hook">Commercial refrigeration, made scroll-worthy: 10x impressions, 6x engagement, and leads up 95.2% from SEO.</p>
+        <div class="rail" tabindex="0" aria-label="Western Equipments: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/western-1.mp4" poster="assets/reels/western-1.jpg" muted loop playsinline preload="none" aria-label="Glass-door cooler launch"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Glass-door cooler launch</figcaption>
+          </figure>
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/western-2.mp4" poster="assets/reels/western-2.jpg" muted loop playsinline preload="none" aria-label="Pretty chilled, right?"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Pretty chilled, right?</figcaption>
+          </figure>
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/western-3.mp4" poster="assets/reels/western-3.jpg" muted loop playsinline preload="none" aria-label="World Environment Day"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>World Environment Day</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/western-2.jpg" alt="Sustainable cooling is the new cool" loading="lazy" width="900" height="900">
+            <figcaption>Sustainable cooling</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="case" id="sigvaris">
+        <header class="case-head">
+          <p class="pill">05</p>
+          <h3 class="case-name">Sigvaris Novomed</h3>
+          <p class="case-hook">Compression wear, made worth clicking.</p>
+          <p class="case-meta"><span>Sigvaris Novomed India</span> · <span>Paid media copy for Meta, Google Performance Max and Amazon</span> · <span>Digichefs</span></p>
+        </header>
+        <div class="story">
+          <div class="story-tabs" role="tablist" aria-label="The story"><button type="button" role="tab" id="sigvaris-tab0" aria-controls="sigvaris-panel0" aria-selected="true">the challenge</button><button type="button" role="tab" id="sigvaris-tab1" aria-controls="sigvaris-panel1" aria-selected="false" tabindex="-1">the insight</button><button type="button" role="tab" id="sigvaris-tab2" aria-controls="sigvaris-panel2" aria-selected="false" tabindex="-1">the idea</button></div>
+          <p class="story-panel" role="tabpanel" id="sigvaris-panel0" aria-labelledby="sigvaris-tab0">Grow online revenue for a 150-year-old medical brand in a category people only search for when something hurts.</p>
+          <p class="story-panel" role="tabpanel" id="sigvaris-panel1" aria-labelledby="sigvaris-tab1" hidden>Nobody shops for compression. They shop for relief from heavy, aching legs.</p>
+          <p class="story-panel" role="tabpanel" id="sigvaris-panel2" aria-labelledby="sigvaris-tab2" hidden>Benefit-first ad copy (relief, comfort, vein health), matched to audience signals across Performance Max asset groups, Meta and Amazon.</p>
+        </div>
+        <dl class="case-stats" aria-label="Results">
+            <div class="stat stat-yellow"><dd>4.5x</dd><dt>ROAS</dt></div>
+            <div class="stat stat-pink"><dd>+25%</dd><dt>revenue month on month</dt></div>
+            <div class="stat stat-yellow"><dd>+60%</dd><dt>Meta conversions</dt></div>
+            <div class="stat stat-pink"><dd>16x</dd><dt>ROAS on Amazon</dt></div>
+        </dl>
+        <div class="rail" tabindex="0" aria-label="Sigvaris Novomed: creatives">
+          <figure class="pol pol-img">
+            <img src="assets/img/sigvaris-1.jpg" alt="Say no to varicose veins, say yes to Sigvaris" loading="lazy" width="900" height="900">
+            <figcaption>Say no to varicose veins</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/sigvaris-2.jpg" alt="Experience relief from pain and heaviness in the legs" loading="lazy" width="900" height="900">
+            <figcaption>Relief for heavy legs</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/sigvaris-3.jpg" alt="Designed to improve vein health" loading="lazy" width="900" height="900">
+            <figcaption>Vein health</figcaption>
+          </figure>
+        </div>
+      </article>
 
-        <g class="doodles" filter="url(#boil)">
-          <!-- swirl over the top -->
-          <path pathLength="1" style="--c:var(--violet);--d:0s;--t:1.1s" d="M70 205 C 150 110, 240 190, 330 120 S 520 60, 610 120 S 780 190, 860 115 S 960 100, 975 150"/>
-          <!-- coffee cup with steam -->
-          <path pathLength="1" style="--c:var(--orange);--d:.9s" d="M40 430 L180 430 L162 560 Q 110 595 58 560 Z"/>
-          <path pathLength="1" style="--c:var(--orange);--d:1.2s;--t:.5s" d="M178 455 C 235 452, 238 525, 166 522"/>
-          <path pathLength="1" style="--c:var(--orange);--d:1.35s;--t:.4s" d="M22 600 Q 110 632 200 600"/>
-          <path pathLength="1" class="thin" style="--c:var(--cyan);--d:1.5s;--t:.6s" d="M85 405 C 62 375, 105 355, 84 325 C 68 300, 100 285, 88 258"/>
-          <path pathLength="1" class="thin" style="--c:var(--cyan);--d:1.65s;--t:.6s" d="M135 405 C 112 375, 155 355, 134 325 C 118 300, 150 285, 138 258"/>
-          <!-- pencil -->
-          <path pathLength="1" style="--c:var(--lime);--d:1.9s;--t:.7s" d="M20 700 L195 665 L203 707 L28 742 Z"/>
-          <path pathLength="1" style="--c:var(--lime);--d:2.2s;--t:.4s" d="M195 665 L252 682 L203 707"/>
-          <path pathLength="1" class="thin" style="--c:var(--lime);--d:2.35s;--t:.3s" d="M60 693 L68 734"/>
-          <path pathLength="1" class="thin" style="--c:var(--pink);--d:2.45s;--t:.6s" d="M255 690 C 285 700, 280 735, 255 740 C 230 745, 240 775, 270 780"/>
-          <!-- cat, top right -->
-          <path pathLength="1" style="--c:var(--pink);--d:2.5s;--t:1s" d="M790 330 C 778 275, 796 237, 812 223 L 802 165 L 844 205 Q 866 199 888 205 L 930 165 L 920 223 C 940 237, 952 277, 936 330 C 916 377, 812 377, 790 330 Z"/>
-          <path pathLength="1" class="thin" style="--c:var(--pink);--d:3.2s;--t:.2s" d="M832 277 L832 291"/>
-          <path pathLength="1" class="thin" style="--c:var(--pink);--d:3.25s;--t:.2s" d="M894 277 L894 291"/>
-          <path pathLength="1" class="thin" style="--c:var(--pink);--d:3.3s;--t:.25s" d="M853 309 L863 318 L873 309"/>
-          <path pathLength="1" class="thin" style="--c:var(--pink);--d:3.4s;--t:.4s" d="M782 309 L740 299 M782 325 L742 333 M944 309 L986 299 M944 325 L984 333"/>
-          <!-- flower, right -->
-          <circle pathLength="1" style="--c:var(--red);--d:2.1s;--t:.5s" cx="880" cy="500" r="26"/>
-          <path pathLength="1" style="--c:var(--red);--d:2.35s;--t:.9s" d="M880 474 C 845 415, 915 415, 880 474 M906 500 C 965 465, 965 535, 906 500 M880 526 C 915 585, 845 585, 880 526 M854 500 C 795 535, 795 465, 854 500"/>
-          <path pathLength="1" style="--c:var(--lime);--d:2.9s;--t:.7s" d="M880 555 C 860 625, 905 680, 878 745"/>
-          <path pathLength="1" class="thin" style="--c:var(--lime);--d:3.3s;--t:.4s" d="M884 650 C 930 615, 955 650, 892 672"/>
-          <!-- little sparkles -->
-          <path pathLength="1" class="thin" style="--c:var(--cyan);--d:3.5s;--t:.35s" d="M700 230 L700 280 M675 255 L725 255"/>
-          <path pathLength="1" class="thin" style="--c:var(--orange);--d:3.6s;--t:.35s" d="M250 300 L250 342 M229 321 L271 321"/>
-          <!-- underline under the name -->
-          <path pathLength="1" style="--c:var(--pink);--d:4.6s;--t:.6s" d="M560 1225 C 650 1205, 800 1212, 960 1188"/>
-        </g>
+      <div class="trio">
+      <article class="compact" id="betterflour">
+        <p class="pill">06</p>
+        <header class="compact-head">
+          <h3 class="compact-name">The Better Flour</h3>
+          <p class="case-meta">Healthy food · Campaign strategy, social and website copy · Mancunianz</p>
+        </header>
+        <p class="compact-hook">Healthy pasta, minus the guilt trip. Won Gold for Brand Loyalty Excellence.</p>
+        <div class="rail" tabindex="0" aria-label="The Better Flour: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/betterflour-1.mp4" poster="assets/reels/betterflour-1.jpg" muted loop playsinline preload="none" aria-label="Emmer pasta recipe"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Emmer pasta recipe</figcaption>
+          </figure>
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/betterflour-2.mp4" poster="assets/reels/betterflour-2.jpg" muted loop playsinline preload="none" aria-label="Emmer pasta launch"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Emmer pasta launch</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="compact" id="skincare">
+        <p class="pill">07</p>
+        <header class="compact-head">
+          <h3 class="compact-name">Sukin &amp; G&amp;M Cosmetics</h3>
+          <p class="case-meta">Skincare · Influencer marketing · Digichefs</p>
+        </header>
+        <p class="compact-hook">#SimplySukin reached 1.9M accounts with 2.7M impressions, and G&amp;M engaged 11,921+ more.</p>
+        <p class="compact-links">Watch #SimplySukin on Instagram: <a href="https://www.instagram.com/reel/CfMLojBjs7_/">reel 1</a>, <a href="https://www.instagram.com/reel/Cfb3esLqi0T/">reel 2</a>, <a href="https://www.instagram.com/reel/Ce6GFMppcob/">reel 3</a>, <a href="https://www.instagram.com/reel/Ce5tiBmluEn/">reel 4</a></p>
+        <div class="rail" tabindex="0" aria-label="Sukin &amp; G&amp;M Cosmetics: reels and creatives">
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/gm-1.mp4" poster="assets/reels/gm-1.jpg" muted loop playsinline preload="none" aria-label="G&amp;M · Pure Papaya"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>G&amp;M · Pure Papaya</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/gm-1.jpg" alt="G&amp;M: goat's milk or calming lavender?" loading="lazy" width="900" height="900">
+            <figcaption>Goat milk or lavender?</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/gm-2.jpg" alt="G&amp;M: embrace that dazzling glow" loading="lazy" width="900" height="900">
+            <figcaption>Dazzling glow</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="compact" id="inicio">
+        <p class="pill">08</p>
+        <header class="compact-head">
+          <h3 class="compact-name">Inicio by Infra.Market</h3>
+          <p class="case-meta">Home decor · Brand identity · Digichefs</p>
+        </header>
+        <p class="compact-hook">A 360° rebrand, from the name up: persona, identity, website and social.</p>
+        <div class="rail" tabindex="0" aria-label="Inicio by Infra.Market: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/inicio-1.mp4" poster="assets/reels/inicio-1.jpg" muted loop playsinline preload="none" aria-label="Neutral tones"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Neutral tones</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/inicio-2.mp4" poster="assets/reels/inicio-2.jpg" muted loop playsinline preload="none" aria-label="Champagne pink"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Champagne pink</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/inicio-3.mp4" poster="assets/reels/inicio-3.jpg" muted loop playsinline preload="none" aria-label="Calming greens"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Calming greens</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/g-inicio-colours.jpg" alt="Colours talk a lot about your personality" loading="lazy" width="900" height="900">
+            <figcaption>Colours talk</figcaption>
+          </figure>
+        </div>
+      </article>
+      </div>
 
-        <!-- animal-print star stickers -->
-        <g transform="translate(95 125) scale(2.1)"><g class="sticker" style="--d:1.6s;--r:-12deg">
-          <use href="#burst10" fill="url(#zebra)" stroke="#fff6ef" stroke-width="3"/>
-        </g></g>
-        <g transform="translate(955 815) scale(1.8)"><g class="sticker" style="--d:2.0s;--r:10deg">
-          <use href="#star5" fill="#ff5fd2" stroke="#fff6ef" stroke-width="3"/>
-          <use href="#star5" fill="url(#snow)" transform="scale(.62)"/>
-        </g></g>
-        <g transform="translate(80 910) scale(2.2)"><g class="sticker" style="--d:2.4s;--r:-8deg">
-          <use href="#star5" fill="url(#leopard)" stroke="#fff6ef" stroke-width="3"/>
-        </g></g>
-        <g transform="translate(610 90) scale(1.45)"><g class="sticker" style="--d:2.8s;--r:14deg">
-          <use href="#burst8" fill="#ff7ad9" stroke="#fff6ef" stroke-width="3"/>
-          <use href="#burst8" fill="url(#cheetah)" transform="scale(.7)"/>
-        </g></g>
-        <g transform="translate(900 1090) scale(2.2)"><g class="sticker" style="--d:3.2s;--r:-6deg">
-          <use href="#star5" fill="url(#cheetah)" stroke="#fff6ef" stroke-width="3"/>
-          <use href="#star5" fill="#ff4fcf" transform="scale(.38)"/>
-        </g></g>
-        <g transform="translate(200 1160) scale(1.7)"><g class="sticker" style="--d:3.6s;--r:18deg">
-          <use href="#star5" fill="url(#snow)" stroke="#fff6ef" stroke-width="3"/>
-          <use href="#star5" fill="#ff8fe0" transform="scale(.6)"/>
-        </g></g>
-        <g transform="translate(345 55) scale(1.15)"><g class="sticker" style="--d:4.0s;--r:-16deg">
-          <use href="#burst8" fill="url(#leopard)" stroke="#fff6ef" stroke-width="3"/>
-          <use href="#star5" fill="#ff4fcf" transform="scale(.4)"/>
-        </g></g>
+    <header class="more-head" id="more-work">
+      <p class="pill">more work</p>
+      <h2 class="more-title">More brands, more stories.</h2>
+      <p class="work-intro">Reels and creatives from more of the brands I've written for.</p>
+    </header>
+      <article class="compact" id="purnartha">
+        <header class="compact-head">
+          <h3 class="compact-name">Purnartha</h3>
+          <p class="case-meta">BFSI · Paid media copy · Digichefs</p>
+        </header>
+        <p class="compact-hook">Performance ad copy for a SEBI-registered equity advisor: 5.89x ROAS and 8,087 leads in 12 months.</p>
+        <div class="rail" tabindex="0" aria-label="Purnartha: reels and creatives">
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/purnartha-1.mp4" poster="assets/reels/purnartha-1.jpg" muted loop playsinline preload="none" aria-label="Year-end investing"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Year-end investing</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/purnartha-1.jpg" alt="Add Purnartha to diversify your investment portfolio" loading="lazy" width="900" height="900">
+            <figcaption>Diversify</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/purnartha-2.jpg" alt="Teacher's Day post" loading="lazy" width="900" height="900">
+            <figcaption>Teacher's Day</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="compact" id="narayani">
+        <header class="compact-head">
+          <h3 class="compact-name">Narayani Hospital</h3>
+          <p class="case-meta">Healthcare · Social and website copy · Ikshana</p>
+        </header>
+        <p class="compact-hook">Doctor-led explainers and a paid-ads roadmap for a multi-specialty hospital.</p>
+        <div class="rail" tabindex="0" aria-label="Narayani Hospital: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/narayani-hpv.mp4" poster="assets/reels/narayani-hpv.jpg" muted loop playsinline preload="none" aria-label="HPV explainer with a specialist"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>HPV explainer with a specialist</figcaption>
+          </figure>
+          <figure class="pol pol-reel pol-square">
+            <video src="assets/reels/narayani-2.mp4" poster="assets/reels/narayani-2.jpg" muted loop playsinline preload="none" aria-label="Doctors' Day film"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Doctors' Day film</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/g-narayani.jpg" alt="Three years of compassionate healing" loading="lazy" width="900" height="900">
+            <figcaption>Three years of healing</figcaption>
+          </figure>
+          <figure class="pol pol-img">
+            <img src="assets/img/g-earth-day.jpg" alt="Earth Day post" loading="lazy" width="900" height="900">
+            <figcaption>Earth Day</figcaption>
+          </figure>
+        </div>
+      </article>
+      <article class="compact" id="gradstar">
+        <header class="compact-head">
+          <h3 class="compact-name">Gradstar Global Education</h3>
+          <p class="case-meta">Education · Short-form video</p>
+        </header>
+        <p class="compact-hook">Study-abroad advice, in thirty seconds or less.</p>
+        <div class="rail" tabindex="0" aria-label="Gradstar Global Education: reels and creatives">
+          <figure class="pol pol-reel">
+            <video src="assets/reels/gradstar-4.mp4" poster="assets/reels/gradstar-4.jpg" muted loop playsinline preload="none" aria-label="Study abroad careers"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Study abroad careers</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/gradstar-3.mp4" poster="assets/reels/gradstar-3.jpg" muted loop playsinline preload="none" aria-label="Application support"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Application support</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/gradstar-1.mp4" poster="assets/reels/gradstar-1.jpg" muted loop playsinline preload="none" aria-label="Choosing a university"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Choosing a university</figcaption>
+          </figure>
+          <figure class="pol pol-reel">
+            <video src="assets/reels/gradstar-2.mp4" poster="assets/reels/gradstar-2.jpg" muted loop playsinline preload="none" aria-label="Study abroad"></video>
+            <button class="reel-sound" type="button" aria-pressed="false">sound off</button>
+            <figcaption>Study abroad</figcaption>
+          </figure>
+        </div>
+      </article>
 
-        <text class="scribble-name" x="600" y="1190" transform="rotate(-6 760 1170)" filter="url(#boil)">isha!</text>
-      </svg>
+    <section class="awards" aria-labelledby="awards-title">
+      <p class="pill">awards</p>
+      <h2 class="more-title" id="awards-title">Won in 2024 by brands I wrote for.</h2>
+      <ul class="award-list">
+        <li class="award"><strong>Tata Motors</strong><span>19 awards: 9 Gold, 9 Silver, 1 Bronze, including Gold for rebranding, brand extension, new product launch and regional content</span></li>
+        <li class="award"><strong>Cinépolis Gulf</strong><span>2 Gold: Digital Branding Excellence and Email Marketing Creative</span></li>
+        <li class="award"><strong>The Better Flour</strong><span>Gold: Brand Loyalty Excellence</span></li>
+        <li class="award"><strong>FG Glass</strong><span>Gold: Best Email Marketing Campaign</span></li>
+        <li class="award"><strong>Lakeshore</strong><span>Silver: Most Admired Brand Activation Campaign</span></li>
+        <li class="award"><strong>Khaleej Packs</strong><span>Bronze: Excellence in Launch Marketing</span></li>
+      </ul>
+    </section>
+  </section>
+
+  <section class="about" id="about" aria-labelledby="about-title">
+    <div class="about-inner">
+      <figure class="about-pic">
+        <img class="about-pol" src="assets/polaroid-cat.webp" alt="Isha holding her cat" width="480" height="764">
+        <img class="tape about-tape" src="assets/tape-gingham.webp" alt="">
+      </figure>
+      <div class="about-copy">
+        <p class="pill">about Isha</p>
+        <h2 class="about-title" id="about-title">Coffee, copy, content, and cats.</h2>
+        <p class="about-lead">I’ve spent most of my career in rooms filled with exceptionally creative and challenging beings, waiting for an answer behind my “why”.</p>
+        <p>The incredible agency experience of 3+ years is what shaped me and helped me step into becoming the primary client-facing strategist for brands across India and the Middle East. From building my own agency and retaining a healthcare institution for 3 years straight, to making my way to the States, a land of brands and disruptive campaigns, I bring excitement and intent to every creative opportunity I get.</p>
+        <p>I've led a 12-person creative team, mentored interns and campus ambassadors, and wherever I land, I end up improving how the whole team works, not just my own desk. With the ever-changing martech upskilling needs, I too have learnt to preserve authenticity while coexisting with AI-automated tools. I write prompts the way I write briefs, detailed and easy to understand. I’ve built automated workflows, websites, landing pages and internal tools for the teams I work with. One AI workflow I built was rolled out agency-wide and cut creative brief turnaround from three days to two.</p>
+        <p>Off the clock, I’ve been grateful enough to pursue every creative awakening I’ve ever had. From art, to music and almost every sport I’ve ever come across. In my mundane life, there's a coffee in my hand, a cat in my lap, a TBR pile that only grows, along with a YouTube watchlist that makes sense to no one but me. I also like to talk a lot. Consider yourself warned&nbsp;:)</p>
+      </div>
     </div>
-
-    <h1 class="visually-hidden">Isha Deo</h1>
-    <p class="soon">coming soon</p>
-    <div class="links">
-      <a class="btn" href="assets/Isha_Deo_Resume.pdf" target="_blank" rel="noopener">Resume</a>
-      <a class="btn" href="mailto:deoisha278@gmail.com">Email</a>
+    <div class="skills-wrap">
+      <h3 class="pill">what I'm skilled at</h3>
+      <ul class="skills">
+          <li class="skill skill-yellow">Creative strategy &amp; pitching</li>
+          <li class="skill skill-pink">Brand &amp; campaign strategy</li>
+          <li class="skill skill-paper">Social &amp; go-to-market (GTM) strategy</li>
+          <li class="skill skill-yellow">Full-funnel campaign planning &amp; messaging</li>
+          <li class="skill skill-pink">Content partnerships &amp; influencer marketing</li>
+          <li class="skill skill-paper">Trend analysis &amp; cultural insights</li>
+          <li class="skill skill-yellow">Social listening, sentiment &amp; share of voice</li>
+          <li class="skill skill-pink">Audience insights &amp; performance reporting</li>
+          <li class="skill skill-paper">Paid social &amp; performance creative</li>
+          <li class="skill skill-yellow">SEO content &amp; copywriting</li>
+          <li class="skill skill-pink">AI prompt design &amp; workflow automation</li>
+          <li class="skill skill-paper">Website design &amp; landing pages</li>
+          <li class="skill skill-yellow">Client relationships &amp; stakeholder presentations</li>
+          <li class="skill skill-pink">Team leadership &amp; mentoring</li>
+          <li class="skill skill-paper">Short-form video &amp; content production</li>
+          <li class="skill skill-yellow">Event &amp; experiential campaigns</li>
+      </ul>
+      <h3 class="pill pill-tools">tools</h3>
+      <ul class="tools">
+          <li>Google Analytics</li>
+          <li>Talkwalker</li>
+          <li>Sprout Social</li>
+          <li>Meta Ads</li>
+          <li>Meta Business Suite</li>
+          <li>Hootsuite</li>
+          <li>Muck Rack</li>
+          <li>Adobe Creative Suite</li>
+          <li>Canva</li>
+          <li>CapCut</li>
+          <li>Trello</li>
+          <li>Notion</li>
+          <li>Claude Code</li>
+          <li>AI tools</li>
+      </ul>
     </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="contact-stage">
+      <img class="mega" src="assets/megaphone.webp" alt="" aria-hidden="true">
+      <!-- the envelope is two image layers with the letter (real text and links) between them -->
+      <div class="envelope">
+        <img class="env-back" src="assets/envelope-back.webp" alt="" aria-hidden="true">
+        <div class="letter-clip">
+          <div class="letter">
+            <p class="letter-hi">hi there,</p>
+            <h2 class="contact-title" id="contact-title"><span>Let's talk.</span></h2>
+            <p class="contact-text">Need a strategist, a storyteller, or someone to manage your brand end-to-end? Then let's talk!</p>
+            <div class="contact-links">
+              <a class="btn" href="mailto:deoisha278@gmail.com">deoisha278@gmail.com</a>
+              <a class="btn btn-ghost" href="assets/Isha_Deo_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+            </div>
+          </div>
+        </div>
+        <img class="env-front" src="assets/envelope-front.webp" alt="" aria-hidden="true">
+        <button class="env-open" type="button" aria-label="Open the letter"><span class="env-hint">click to open</span></button>
+      </div>
+      <p class="footer-note">© 2026 Isha Deo</p>
+    </div>
+  </section>
   </main>
-  <script>
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      document.querySelectorAll('.boil-anim').forEach((a) => a.remove());
-    }
-  </script>
+
+  <template id="tpl-screen">
+    <img class="screen-pol" src="assets/screen-photo.webp" alt="Isha Deo, photo on the computer screen">
+    <span class="screen-glare"></span>
+  </template>
+
+  <template id="tpl-words">
+    <p class="words-name">Isha Deo</p>
+    <p class="words-role">Marketing &amp; creative strategy</p>
+    <h1 class="words-tagline">Telling stories with strategy.<br> Building content that connects.</h1>
+  </template>
+
+  <template id="tpl-note"><img class="tape tape-n" src="assets/tape-kraft.webp" alt=""><p></p></template>
+
+  <template id="tpl-star">
+    <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4l7.6 17.4L58 23.6 44 36.4l4 19.6L32 46l-16 10 4-19.6L6 23.6l18.4-2.2z" fill="#F3EBDD" stroke="#2A211B" stroke-width="2" stroke-linejoin="round"/></svg>
+  </template>
+
+  <template id="tpl-steam">
+    <svg class="steam" viewBox="0 0 60 120" aria-hidden="true">
+      <path d="M22 118c-8-14 10-22 2-38s8-24 2-40"/>
+      <path d="M32 118c-8-16 12-24 2-42s10-26 2-44"/>
+      <path d="M42 118c-6-14 10-20 2-36s6-22 0-36"/>
+    </svg>
+  </template>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="js/room.js"></script>
+  <script src="js/scroll.js"></script>
 </body>
 </html>
