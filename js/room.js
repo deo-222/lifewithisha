@@ -51,9 +51,12 @@ const ROOM = [
   { id: "sidetable", src: "side-table", x: 1530, bottom: 962, w: 211, aspect: 0.836, shadow: 230 },
   { id: "turntable", src: "turntable-pink", x: 1558, bottom: 736, w: 160, aspect: 1.11, shadow: 150 },
 
+  // ---- desk chair, pulled up to the desk on the rug (~1.1x the desk's height, back stops below the desktop) ----
+  { id: "chair", src: "chair", x: 808, bottom: 1012, w: 240, aspect: 0.693, shadow: 230 },
+
   // ---- on the floor ----
   { id: "cat", src: "cat-calico", x: 1065, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
-    p: { x: 760, bottom: 1046, w: 220 } },
+    p: { x: 1060, bottom: 1062, w: 200 } },   // on the rug, beside the chair
 ];
 
 // bulb centres on the string-lights image (fractions of its width/height)
