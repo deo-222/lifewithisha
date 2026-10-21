@@ -37,7 +37,7 @@ img, video, iframe { display: block; max-width: 100%; }
 .obj.cat > .pic { filter: brightness(.84) contrast(1.14) saturate(.98) sepia(.12) drop-shadow(-6px 6px 6px rgba(45, 28, 14, .38)) drop-shadow(-14px 10px 14px rgba(45, 28, 14, .18)); }
 /* the cat breathes: a slow rise and fall from where it lies */
 .obj.cat > .pic { transform-origin: 50% 100%; animation: breathe 3s ease-in-out infinite; }
-@keyframes breathe { 0%, 100% { transform: scale(1, 1); } 45% { transform: scale(1.018, 1.055); } }
+@keyframes breathe { 0%, 100% { transform: scale(1, 1); } 45% { transform: scale(1.005, 1.02); } }   /* a gentle rise, barely any growth */
 @media (prefers-reduced-motion: reduce) { .obj.cat > .pic { animation: none; } }
 .obj.lamp > .pic { filter: saturate(1.05) contrast(1.04) var(--cast); }   /* keep the lacquered red rich, not sepia */
 .obj.rug > .pic { filter: saturate(.75) sepia(.18) brightness(.97) drop-shadow(-2px 2px 2px rgba(60, 40, 22, .3)); opacity: .96; }   /* a flat rug only gets a thin edge shadow */
