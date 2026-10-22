@@ -83,6 +83,9 @@ img, video, iframe { display: block; max-width: 100%; }
   border-radius: 999px; background: #F3C9D3;
   font: 700 calc(var(--k) * 17px)/1.2 "Space Mono", ui-monospace, monospace; text-transform: lowercase; letter-spacing: -.01em;
 }
+@media (max-aspect-ratio: 11/10) {   /* phones: the role pill a size up, so it reads at a glance */
+  .words-role { margin-top: calc(var(--k) * 18px) !important; padding: calc(var(--k) * 8px) calc(var(--k) * 20px); font-size: calc(var(--k) * 23px); }
+}
 .words-tagline { margin-top: calc(var(--k) * 22px) !important; font: 400 calc(var(--k) * 40px)/1.14 "DM Serif Display", Georgia, serif; }
 
 /* ---------- magnetic board: steel in a dark wood frame, a letter in its envelope held up by a magnet ---------- */
