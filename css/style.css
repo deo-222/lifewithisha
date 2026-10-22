@@ -111,7 +111,7 @@ img, video, iframe { display: block; max-width: 100%; }
   position: absolute; left: 4%; top: 0; width: 92%; height: 84%;
   background: url("../assets/letter-paper.webp") center / cover; transition: transform .35s ease;
 }
-.letter-paper p { margin: 22% 0 0; text-align: center; font: italic 400 8.5cqw/1 var(--script); color: var(--ink); }
+.letter-paper p { margin: 22% 0 0; text-align: center; font: 700 8.5cqw/1 var(--script); color: var(--ink); }
 .board:hover .letter-paper, .board:focus-visible .letter-paper { transform: translateY(-6%); }   /* the letter peeks up out of the envelope */
 .pinned .env { position: absolute; left: 0; bottom: 0; width: 100%; display: block; }
 .pinned .magnet { position: absolute; left: 50%; top: -4%; width: 15%; transform: translateX(-50%); filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, .35)); }
@@ -120,11 +120,7 @@ img, video, iframe { display: block; max-width: 100%; }
 .note { container-type: size; padding: 0 6px; display: flex; align-items: center; justify-content: center; text-align: center; }
 .note-yellow { background: linear-gradient(160deg, #F8E58C, #EFD56A); }
 .note-pink   { background: linear-gradient(160deg, #F6C7CF, #EDB2BD); }
-.note p { margin: 12% 0 0; font: italic 400 17cqw/1.05 var(--script); color: var(--ink); }
-@media (max-aspect-ratio: 11/10) {   /* phones: bold, so the small notes and the letter still read */
-  .note p { font: 700 16cqw/1.05 var(--script); }
-  .letter-paper p { font: 700 8.5cqw/1 var(--script); }
-}
+.note p { margin: 12% 0 0; font: 700 16cqw/1.05 var(--script); color: var(--ink); }   /* bold, so the notes read at a glance */
 .tape { position: absolute; display: block; }
 .tape-n { width: 74px; left: 50%; top: -12px; transform: translateX(-50%) rotate(-4deg); }
 .star svg { display: block; width: 100%; height: 100%; }

@@ -12,8 +12,8 @@ const CANVAS = { w: 1920, h: 1881, view: 1080 };
 
 const ROOM = [
   // ---- on the wall. Only pieces that lead somewhere float; `label` + `go`/`act` make a piece clickable ----
-  { id: "painting", src: "painting-limes-wall", x: 135, bottom: 497, w: 155, aspect: 0.5095, cls: "hung" },   // on the left wall, in its perspective
-  { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
+  { id: "painting", src: "painting-limes-wall", x: 176, bottom: 458, w: 110, aspect: 0.5143, cls: "hung" },   // on the left wall, in its perspective
+  { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 452, bottom: 236, w: 104, h: 104, float: { rot: -7, dur: 7.5, delay: -5 },
     label: "about Isha", go: "#about" },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
     label: "see the stories", go: "#work" },
