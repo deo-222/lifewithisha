@@ -688,21 +688,6 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .hint-arrow { display: inline-block; animation: hint-bob 1.6s ease-in-out infinite; }
 .hint-touch { display: none; }
 @media (hover: none) { .hint-touch { display: inline; } .hint-mouse { display: none; } }
-/* the playlist pop-up (the wall vinyl opens it) */
-.playlist { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgba(42, 33, 27, .45); backdrop-filter: blur(3px); }
-.playlist[hidden] { display: none; }
-.playlist-card {
-  position: relative; width: min(400px, 100%); padding: 14px 14px 12px; border-radius: 18px; background: var(--paper);
-  box-shadow: 0 24px 60px rgba(42, 33, 27, .35); text-align: center;
-}
-.playlist-title { margin: 2px 0 10px; font: 700 13px/1 "Space Mono", monospace; color: var(--ink); }
-.playlist-card iframe { display: block; width: 100%; height: min(380px, 62vh); border: 0; border-radius: 12px; background: #1F1A17; }
-.playlist-open { display: inline-block; margin-top: 10px; font: 700 12px/1 "Space Mono", monospace; color: var(--burgundy); }
-.playlist-close {
-  position: absolute; top: -12px; right: -12px; width: 36px; height: 36px; border: 0; border-radius: 50%; cursor: pointer;
-  background: var(--ink); color: var(--paper); font: 400 22px/1 "Outfit", sans-serif; box-shadow: 0 6px 16px rgba(42, 33, 27, .3);
-}
-@media (max-width: 440px) { .playlist-close { top: -10px; right: -6px; } }
 @media (max-width: 420px) { .room-hint { font-size: 11px; padding: 8px 12px; bottom: 16px; } }
 /* touch screens: labels show one at a time in this spot above the hint (scroll.js), not over each piece */
 .tap-label {

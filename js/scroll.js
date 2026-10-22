@@ -400,25 +400,6 @@ let pets = 0;
 function openTab(href) {
   Object.assign(document.createElement("a"), { href, target: "_blank", rel: "noopener noreferrer" }).click();
 }
-// the playlist pop-up: Spotify's embedded player on the page, which works where their full web player can load blank
-const playlist = document.querySelector(".playlist"), playlistFrame = playlist.querySelector("iframe");
-let playlistFrom = null;
-function openPlaylist() {
-  if (!playlistFrame.src) playlistFrame.src = "https://open.spotify.com/embed/playlist/3FPbDSFnM1eKzWLVyRI7tx?theme=0";
-  if (Sound.playing()) ACTS.music();   // one soundtrack at a time
-  playlistFrom = document.activeElement;
-  playlist.hidden = false;
-  if (lenis) lenis.stop();
-  playlist.querySelector(".playlist-close").focus();
-}
-function closePlaylist() {
-  if (playlist.hidden) return;
-  playlist.hidden = true;
-  if (lenis) lenis.start();
-  if (playlistFrom) playlistFrom.focus({ preventScroll: true });
-}
-playlist.addEventListener("click", (e) => { if (e.target === playlist || e.target.closest(".playlist-close")) closePlaylist(); });
-addEventListener("keydown", (e) => { if (e.key === "Escape") closePlaylist(); });
 const ACTS = {
   cat(el) {
     pets++;
@@ -440,7 +421,7 @@ const ACTS = {
     const s = document.createElement("span"); s.className = "smoke"; el.appendChild(s);
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
-  spotify() { openPlaylist(); },
+  spotify() { openTab("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx?si=m4vRnfMFS4iKwYTROt2PsA"); },
   mail() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   linkedin() { openTab("https://www.linkedin.com/in/ishadeo27"); },
   music() {
