@@ -22,7 +22,7 @@ const ROOM = [
   // a small magnetic board (~45x58cm) with a letter in its envelope held up by a magnet
   { id: "board", html: "board", x: 1352, bottom: 480, w: 150, h: 196, cls: "hung",
     label: "let's connect ✉", act: "mail" },
-  { id: "bulb", src: "bulb", x: 1250, bottom: 500, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
+  { id: "bulb", src: "bulb", x: 1254, bottom: 497, w: 38, aspect: 0.609, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
     label: "what I'm good at", go: "#skills" },
   { id: "megaphone", src: "megaphone", x: 1600, bottom: 470, w: 80, aspect: 1.014, float: { rot: -6, dur: 7.2, delay: -3.5 },
     label: "say hi", go: "#contact" },
@@ -66,16 +66,14 @@ const ROOM = [
 const DESK_DROP = 90, DESK_SHIFT = 40;   // on phones the desk and everything on it sit lower, and a little right of centre
 const desk = (x, bottom) => ({ x: x + DESK_SHIFT, bottom: bottom + DESK_DROP });
 const PHONE = {
-  // the wall keeps one piece per spot so it doesn't crowd: the "work" note and the megaphone stay on desktop
-  // (the screen, the menu and the board cover them here)
   painting: { src: "painting-limes", x: 662, bottom: 246, w: 84, h: 105 },   // top left on the back wall, so seen straight on
   "note-b": { x: 1170, bottom: 236, w: 76, h: 76 },   // top right, opposite the painting
   words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
-  vinyl: { x: 676, bottom: 548, w: 116 },
-  bulb: { x: 948, bottom: 472, w: 36 },
-  board: { x: 1150, bottom: 540, w: 100, h: 131 },
-  "note-a": { hide: true },
-  megaphone: { hide: true },
+  vinyl: { x: 664, bottom: 498, w: 100 },   // well clear of the lamp's shade
+  "note-a": { x: 792, bottom: 474, w: 72, h: 72 },
+  bulb: { x: 966, bottom: 470, w: 30 },
+  board: { x: 1176, bottom: 526, w: 94, h: 123 },   // right of the screen, not over it
+  megaphone: { hide: true },   // the board and the menu already lead to contact
   floorlamp: { x: 616, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
   rug: desk(490, 1076),
   desk: desk(700, 930),

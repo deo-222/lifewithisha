@@ -155,15 +155,13 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
       fading().forEach((el) => { el.style.opacity = 1 - t; el.style.visibility = t >= 1 ? "hidden" : ""; });   // gone = not drawn
       const w = range(ZOOM.swap, p);
       site.style.opacity = w; photo.style.opacity = 1 - w;
-      const h = range(ZOOM.dissolve, p);
-      handoff.style.opacity = h;
-      // once the copy has taken over, the room behind it is hidden, so a slow frame can never show it through
-      document.documentElement.classList.toggle("handed", h >= 1);
+      // the copy waits, already drawn, under the room (CSS); at the hand-off the room is hidden to reveal it
+      document.documentElement.classList.toggle("handed", range(ZOOM.dissolve, p) >= 1);
     },
   });
   return () => {
     zoomST = null; roomStart(0);
-    st.kill(); applyZoom(0); handoff.style.opacity = 0; site.style.opacity = 0; photo.style.opacity = "";
+    st.kill(); applyZoom(0); site.style.opacity = 0; photo.style.opacity = "";
     document.documentElement.classList.remove("handed");
     fading().forEach((el) => { el.style.opacity = ""; el.style.visibility = ""; });
     document.documentElement.classList.remove("zoom-on");

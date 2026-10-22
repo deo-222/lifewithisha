@@ -26,6 +26,8 @@ img, video, iframe { display: block; max-width: 100%; }
 .room { position: absolute; left: 0; top: 0; width: 1920px; height: 1881px; }
 
 .obj { position: absolute; }
+.obj:not(.hot) { pointer-events: none; }   /* only clickable pieces catch taps (the name's box sat over the pink note) */
+.obj .hot { pointer-events: auto; }
 .obj[hidden] { display: none; }
 .culled { visibility: hidden; }   /* pushed out of view by the zoom (scroll.js) */
 .obj > .pic { display: block; width: 100%; height: 100%; }
@@ -263,9 +265,11 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
    Handoff: a copy of the Work heading the iMac screen dissolves into
    ========================================================================== */
 .handoff { position: absolute; inset: 0; z-index: 5; opacity: 0; visibility: hidden; background: var(--paper); pointer-events: none; }
-/* on desktop the copy is drawn (at opacity 0) all through the zoom, so Chrome has it painted before the
-   hand-off instead of painting it on that very frame, which let tiles of the room flash through */
-.zoom-on .handoff { visibility: visible; will-change: opacity; }
+/* on desktop, once the zoom starts, the copy sits fully drawn underneath the room, so the browser has it painted
+   long before the hand-off; at the hand-off the room is simply hidden. (Fading it in on that very frame showed
+   either the room or blank paper for a frame while the browser caught up.) */
+.zoom-on.zoomed .scene.is-ready ~ .handoff { visibility: visible; opacity: 1; z-index: 0; }
+.zoom-on .scene { z-index: 1; }
 .handed .stage { background: var(--paper); }
 .handed .scene { visibility: hidden; }
 /* the same copy on the iMac screen: a browser-sized page, shrunk to fit (scroll.js sets the size) */
