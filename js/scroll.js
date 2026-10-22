@@ -411,6 +411,7 @@ const ACTS = {
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
   spotify() { window.open("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx", "_blank", "noopener,noreferrer"); },
+  mail() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
   music() {
     if (!Sound.isOn()) setSound(true);
