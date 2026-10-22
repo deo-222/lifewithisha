@@ -483,7 +483,7 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
   .topnav { padding: 12px 12px; }
   .wordmark { font-size: 18px; white-space: nowrap; }
   .topnav nav { gap: 4px; }
-  .topnav nav a, .sound-toggle { font-size: 10.5px; padding: 7px 8px; }
+  .topnav nav a, .sound-toggle { font-size: 11.5px; padding: 8px 7px; }
   .envelope { --ew: min(420px, 96vw); }
   .about-inner { grid-template-columns: 1fr; }
   .skill { flex-basis: calc(50% - 10px); }
@@ -674,7 +674,8 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .hint-arrow { display: inline-block; animation: hint-bob 1.6s ease-in-out infinite; }
 .hint-touch { display: none; }
 @media (hover: none) { .hint-touch { display: inline; } .hint-mouse { display: none; } }
-@media (max-width: 420px) { .room-hint { font-size: 10.5px; padding: 8px 12px; bottom: 16px; } }
+@media (max-width: 420px) { .room-hint { font-size: 11px; padding: 8px 12px; bottom: 16px; } }
+@media (max-width: 380px) { .topnav nav a, .sound-toggle { font-size: 10.5px; padding: 7px 6px; } .wordmark { font-size: 16px; } }
 
 /* while the page scrolls, or once the zoom has started, the room's hover effects stand down */
 .is-scrolling .hot { pointer-events: none; }

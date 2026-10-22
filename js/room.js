@@ -4,7 +4,7 @@
    phones (portrait) see more of the floor, so the image runs to 1881px.
    Positions are canvas pixels: x = left edge, bottom = where the object's base sits, w = width.
    Height comes from each image's aspect ratio. Later objects are drawn in front.
-   `p` overrides position/size in portrait (phone) mode. `float` makes an item hover.
+   PHONE (below) moves and resizes pieces in portrait (phone) mode. `float` makes an item hover.
    Real-world scale: the back wall is ~2.4m tall = 823px, so 1m ≈ 345px.
    ========================================================================== */
 
@@ -12,37 +12,28 @@ const CANVAS = { w: 1920, h: 1881, view: 1080 };
 
 const ROOM = [
   // ---- on the wall. Only pieces that lead somewhere float; `label` + `go`/`act` make a piece clickable ----
-  { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, cls: "hung",
-    p: { hide: true } },
+  { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, cls: "hung" },
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
-    label: "about Isha", go: "#about",
-    p: { x: 582, bottom: 262, w: 92, h: 92 } },
+    label: "about Isha", go: "#about" },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
-    label: "see the stories", go: "#work",
-    p: { x: 1240, bottom: 505, w: 92, h: 92 } },
+    label: "see the stories", go: "#work" },
   { id: "vinyl", src: "vinyl-midnights", x: 1342, bottom: 238, w: 148, aspect: 0.996, cls: "spin hung",   // spins while music plays
-    label: "my playlist ↗", act: "spotify",
-    p: { x: 572, bottom: 455, w: 112 } },
+    label: "my playlist ↗", act: "spotify" },
   // a small magnetic board (~45x58cm) with a letter in its envelope held up by a magnet
   { id: "board", html: "board", x: 1352, bottom: 480, w: 150, h: 196, cls: "hung",
-    label: "let's connect ✉", act: "mail",
-    p: { x: 1232, bottom: 392, w: 88, h: 115 } },
+    label: "let's connect ✉", act: "mail" },
   { id: "bulb", src: "bulb", x: 1232, bottom: 470, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
-    label: "what I'm good at", go: "#skills",
-    p: { x: 1272, bottom: 640, w: 32 } },
+    label: "what I'm good at", go: "#skills" },
   { id: "megaphone", src: "megaphone", x: 1600, bottom: 470, w: 80, aspect: 1.014, float: { rot: -6, dur: 7.2, delay: -3.5 },
-    label: "say hi", go: "#contact",
-    p: { x: 1252, bottom: 790, w: 66 } },
+    label: "say hi", go: "#contact" },
 
   // ---- name + tagline, centred on the wall above the desk ----
-  { id: "words", html: "words", x: 630, bottom: 378, w: 660, h: 300, k: 1,
-    p: { x: 600, bottom: 352, w: 720, h: 232, k: 0.78 } },
+  { id: "words", html: "words", x: 630, bottom: 378, w: 660, h: 300, k: 1 },
 
   // ---- floor, back to front ----
   { id: "rug", src: "rug-persian", x: 490, bottom: 1076, w: 940, aspect: 3.791, cls: "rug" },
   { id: "floorlamp", src: "lamp-red", x: 432, bottom: 905, w: 165, aspect: 0.276, shadow: 120, glow: true, cls: "lamp",
-    label: "lights", act: "lamp",
-    p: { x: 572, bottom: 905, w: 118 } },
+    label: "lights", act: "lamp" },
   { id: "desk", src: "desk-console", x: 700, bottom: 930, w: 520, aspect: 1.55, shadow: 560 },
 
   // ---- on the desk (surface at y ≈ 608) ----
@@ -66,9 +57,36 @@ const ROOM = [
 
   // ---- on the floor ----
   { id: "cat", src: "cat-calico", x: 1080, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
-    label: "pet me", act: "cat",
-    p: { x: 1076, bottom: 1062, w: 200 } },   // on the rug, beside the chair
+    label: "pet me", act: "cat" },   // on the rug, beside the chair
 ];
+
+// Phones (portrait): the same room recomposed for a tall, narrow screen. The view is ~640 canvas px
+// across, so everything reads bigger; the desk sits lower to free the wall for the hung pieces, and the
+// side table with the record player and the cat fill the floor in front of it.
+const DESK_DROP = 90;   // how much lower the desk and everything on it sits on phones
+const PHONE = {
+  painting: { hide: true },
+  words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
+  "note-b": { x: 650, bottom: 454, w: 86, h: 86 },
+  vinyl: { x: 768, bottom: 476, w: 86 },
+  bulb: { x: 944, bottom: 468, w: 34 },
+  board: { x: 1150, bottom: 482, w: 104, h: 136 },
+  "note-a": { x: 1156, bottom: 580, w: 82, h: 82 },
+  megaphone: { x: 1214, bottom: 676, w: 62 },
+  floorlamp: { x: 638, bottom: 920, w: 100 },   // its shade clears the books
+  rug: { bottom: 1076 + DESK_DROP },
+  desk: { bottom: 930 + DESK_DROP },
+  books: { bottom: 609 + DESK_DROP },
+  candle: { bottom: 610 + DESK_DROP },
+  imac: { bottom: 609 + DESK_DROP },
+  mug: { bottom: 616 + DESK_DROP },
+  plant: { bottom: 610 + DESK_DROP },
+  chair: { bottom: 1012 + DESK_DROP },
+  sidetable: { x: 1090, bottom: 1286, w: 186 },
+  turntable: { x: 1114, bottom: 1087, w: 141 },   // on the table top (~201px above its feet at this size)
+  cat: { x: 650, bottom: 1262, w: 226 },
+};
+ROOM.forEach((o) => { if (PHONE[o.id]) o.p = PHONE[o.id]; });
 
 // the books on the desk: one spine per case study, in case order
 const BOOKS = [
@@ -176,12 +194,12 @@ function layout() {
 }
 
 // Desktop: cover-fit the top 1920x1080 of the canvas.
-// Portrait (phones): fit ~700 canvas px across so the poster fits, and let the floor run down the screen.
+// Portrait (phones): ~640 canvas px across, framed from the top of the wall down to the side table (see PHONE).
 function fitScene() {
   const [vw, vh] = viewport();
   let s, ox, oy;
   if (portrait()) {
-    s = Math.min(vw / 800, vh / 1700);   // 800 canvas px across: desk, lamp and wall pieces all fit
+    s = Math.min(vw / 640, vh / 1330);   // ~640 canvas px across, and always the room down to the side table
     ox = vw / 2 - 960 * s; oy = 0;
   } else {
     s = Math.max(vw / CANVAS.w, vh / CANVAS.view);
@@ -200,7 +218,8 @@ const roomFit = { s: 1, ox: 0, oy: 0, vw: 0, vh: 0 };
 
 // the iMac's display area in canvas pixels (scroll.js zooms into it)
 function screenRect() {
-  const m = ROOM.find((o) => o.id === "imac"), [l, t, r, b] = m.screen, h = m.w / m.aspect, top = m.bottom - h;
+  const o = ROOM.find((o) => o.id === "imac"), m = portrait() && o.p ? { ...o, ...o.p } : o;
+  const [l, t, r, b] = m.screen, h = m.w / m.aspect, top = m.bottom - h;
   return { x: m.x + l * m.w, y: top + t * h, w: (r - l) * m.w, h: (b - t) * h };
 }
 
