@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.youtube-nocookie.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; media-src 'self'; frame-src https://www.youtube-nocookie.com https://open.spotify.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Isha Deo · Marketing &amp; creative strategy</title>
   <meta name="description" content="Isha Deo, marketing and creative strategist. Telling stories with strategy. Building content that connects.">
@@ -479,6 +479,15 @@
     </div>
   </section>
   </main>
+
+  <!-- the wall vinyl opens Isha's playlist here, in Spotify's own player (scroll.js loads it on first open) -->
+  <div class="playlist" hidden>
+    <div class="playlist-card" role="dialog" aria-modal="true" aria-label="Isha's playlist">
+      <button type="button" class="playlist-close" aria-label="Close the playlist">×</button>
+      <p class="playlist-title">what I'm listening to ♪</p>
+      <iframe title="chill afternoon mix, a playlist by Isha Deo, on Spotify" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+      <a class="playlist-open" href="https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx?si=m4vRnfMFS4iKwYTROt2PsA" target="_blank" rel="noopener">open in Spotify ↗</a>
+    </div>
 
   <template id="tpl-screen">
     <img class="screen-pol" src="assets/screen-photo.webp" alt="Isha Deo, photo on the computer screen">
