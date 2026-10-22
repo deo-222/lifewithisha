@@ -21,7 +21,7 @@ const ROOM = [
     label: "see the stories", go: "#work",
     p: { x: 1240, bottom: 505, w: 92, h: 92 } },
   { id: "vinyl", src: "vinyl-midnights", x: 1330, bottom: 330, w: 210, aspect: 0.996, cls: "spin hung",   // spins while music plays
-    label: "play music", act: "music",
+    label: "my playlist ↗", act: "spotify",
     p: { x: 572, bottom: 455, w: 112 } },
   { id: "calendar", html: "calendar", x: 1252, bottom: 578, w: 92, h: 104, cls: "hung",
     label: "book a meeting", act: "meet",
@@ -63,7 +63,8 @@ const ROOM = [
   // ---- desk chair, pulled up to the desk on the rug (~1.2x the desk's height): its back overlaps the drawers
   //      and stops just under the desktop. It starts turned toward the visitor and swings round to face the
   //      screen as the zoom begins (scroll.js drives --turn) ----
-  { id: "chair", src: "chair", x: 809, bottom: 1012, w: 270, aspect: 0.693, shadow: 255, cls: "chair" },
+  { id: "chair", src: "chair", x: 809, bottom: 1012, w: 270, aspect: 0.693, shadow: 255, cls: "chair",
+    poses: [["chair-3q", 0.829], ["chair-side", 0.726]] },   // turned toward the visitor, then side-on; the back view is `src`
 
   // ---- on the floor ----
   { id: "cat", src: "cat-calico", x: 1080, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
@@ -138,6 +139,14 @@ function make(o) {
       if (o.tone !== "pink") el.querySelector(".tape").src = "assets/tape-gingham.webp";   // never pink tape on a pink note
     }
     else el.classList.add(o.html);
+  }
+  if (o.poses) {   // extra views of the chair, swapped in by scroll.js as it turns
+    el.dataset.pose = "0";
+    o.poses.forEach(([src, aspect], i) => {
+      const f = new Image(); f.className = "chair-pose"; f.dataset.f = i; f.src = `assets/${src}.webp`; f.alt = ""; f.decoding = "async";
+      f.style.width = `${(aspect / o.aspect) * 100}%`;   // same height as the back view, centred on it
+      el.appendChild(f);
+    });
   }
   if (o.flame) el.insertAdjacentHTML("beforeend", `<span class="glow" style="left:${o.flame.fx * 100}%"></span><span class="flame" style="left:${o.flame.fx * 100}%"></span>`);
   if (o.steam) el.appendChild($("#tpl-steam").content.cloneNode(true));
