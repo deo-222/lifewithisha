@@ -20,7 +20,7 @@
 <body>
   <header class="topnav">
     <a class="wordmark" href="#top">Isha Deo</a>
-    <nav aria-label="Main"><a href="#work">work</a><a href="#about">about</a><a href="#contact">contact</a><a href="assets/Isha_Deo_Resume.pdf" target="_blank" rel="noopener">resume</a></nav>
+    <nav aria-label="Main"><a href="#work">work</a><a href="#about">about</a><a href="#contact">contact</a><a href="assets/Isha_Deo_Resume.pdf" target="_blank" rel="noopener">resume</a><button type="button" class="sound-toggle" aria-pressed="true" aria-label="Sound on">♪ on</button></nav>
   </header>
 
   <div id="smooth-wrapper"><div id="smooth-content">
@@ -28,6 +28,7 @@
   <section class="stage" id="top" aria-label="Isha's room">
     <!-- The room is a 1920-wide canvas; js/room.js places every object from the ROOM config. -->
     <div class="scene" id="scene"></div>
+    <p class="room-hint" aria-hidden="true"><span class="hint-touch">tap</span><span class="hint-mouse">click</span> around the room · scroll to step inside <span class="hint-arrow">↓</span></p>
     <!-- scroll.js fills this with a copy of the Work heading: the iMac screen dissolves into it at the end of the zoom -->
     <div class="handoff" aria-hidden="true"></div>
   </section>
@@ -412,7 +413,7 @@
         <p>Off the clock, I’ve been grateful enough to pursue every creative awakening I’ve ever had. From art, to music and almost every sport I’ve ever come across. In my mundane life, there's a coffee in my hand, a cat in my lap, a TBR pile that only grows, along with a YouTube watchlist that makes sense to no one but me. I also like to talk a lot. Consider yourself warned&nbsp;:)</p>
       </div>
     </div>
-    <div class="skills-wrap">
+    <div class="skills-wrap" id="skills">
       <h3 class="pill">what I'm skilled at</h3>
       <ul class="skills">
           <li class="skill skill-yellow">Creative strategy &amp; pitching</li>
@@ -491,6 +492,13 @@
 
   <template id="tpl-note"><img class="tape tape-n" src="assets/tape-kraft.webp" alt=""><p></p></template>
 
+  <template id="tpl-books"></template>
+  <template id="tpl-calendar">
+    <div class="cal-ring"></div>
+    <p class="cal-month"></p>
+    <p class="cal-day"></p>
+    <p class="cal-note">let's meet</p>
+  </template>
   <template id="tpl-star">
     <svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4l7.6 17.4L58 23.6 44 36.4l4 19.6L32 46l-16 10 4-19.6L6 23.6l18.4-2.2z" fill="#F3EBDD" stroke="#2A211B" stroke-width="2" stroke-linejoin="round"/></svg>
   </template>
@@ -507,6 +515,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js" integrity="sha512-P2IDYZfqSwjcSjX0BKeNhwRUH8zRPGlgcWl5n6gBLzdi4Y5/0O4zaXrtO4K9TZK6Hn1BenYpKowuCavNandERg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollSmoother.min.js" integrity="sha512-t4hwZimhnCKT3YLAsEcAcRDkngVFfCcUIfNLIjklrIZAZKD+GfQMP7HbRcsVHxNS48WRBSywNU1uSM2zzLQt1Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="js/room.js"></script>
+  <script src="js/fx.js"></script>
   <script src="js/scroll.js"></script>
 </body>
 </html>

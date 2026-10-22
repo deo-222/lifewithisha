@@ -11,22 +11,26 @@
 const CANVAS = { w: 1920, h: 1881, view: 1080 };
 
 const ROOM = [
-  // ---- on the wall (floating) ----
-  { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, float: { rot: -6, dur: 7, delay: -1 },
+  // ---- on the wall. Only pieces that lead somewhere float; `label` + `go`/`act` make a piece clickable ----
+  { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, cls: "hung",
     p: { hide: true } },
-  { id: "question", src: "question", x: 491, bottom: 214, w: 38, aspect: 0.601, float: { rot: -10, dur: 6.8, delay: -2 },
-    p: { x: 1282, bottom: 300, w: 26 } },
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
+    label: "about Isha", go: "#about",
     p: { x: 582, bottom: 262, w: 92, h: 92 } },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
+    label: "see the stories", go: "#work",
     p: { x: 1240, bottom: 505, w: 92, h: 92 } },
-  { id: "star", html: "star", x: 200, bottom: 795, w: 56, h: 56, float: { rot: 12, dur: 5.5, delay: -2 },
-    p: { x: 1215, bottom: 352, w: 40, h: 40 } },
-  { id: "vinyl", src: "vinyl-midnights", x: 1330, bottom: 330, w: 210, aspect: 0.996, cls: "spin", float: { rot: 0, dur: 8, delay: -4 },
+  { id: "vinyl", src: "vinyl-midnights", x: 1330, bottom: 330, w: 210, aspect: 0.996, cls: "spin hung",   // spins while music plays
+    label: "play music", act: "music",
     p: { x: 572, bottom: 455, w: 112 } },
-  { id: "bulb", src: "bulb", x: 1262, bottom: 556, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
+  { id: "calendar", html: "calendar", x: 1252, bottom: 578, w: 92, h: 104, cls: "hung",
+    label: "book a meeting", act: "meet",
+    p: { x: 1222, bottom: 388, w: 80, h: 90 } },
+  { id: "bulb", src: "bulb", x: 1388, bottom: 566, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
+    label: "what I'm good at", go: "#skills",
     p: { x: 1272, bottom: 640, w: 32 } },
   { id: "megaphone", src: "megaphone", x: 1600, bottom: 470, w: 80, aspect: 1.014, float: { rot: -6, dur: 7.2, delay: -3.5 },
+    label: "say hi", go: "#contact",
     p: { x: 1252, bottom: 790, w: 66 } },
 
   // ---- name + tagline, centred on the wall above the desk ----
@@ -36,34 +40,53 @@ const ROOM = [
   // ---- floor, back to front ----
   { id: "rug", src: "rug-persian", x: 490, bottom: 1076, w: 940, aspect: 3.791, cls: "rug" },
   { id: "floorlamp", src: "lamp-red", x: 432, bottom: 905, w: 165, aspect: 0.276, shadow: 120, glow: true, cls: "lamp",
+    label: "lights", act: "lamp",
     p: { x: 572, bottom: 905, w: 118 } },
   { id: "desk", src: "desk-console", x: 700, bottom: 930, w: 520, aspect: 1.55, shadow: 560 },
 
   // ---- on the desk (surface at y ≈ 608) ----
-  { id: "books", src: "books-row", x: 726, bottom: 609, w: 99, aspect: 0.95, shadow: 96 },   // eight hardbacks standing upright, ~24cm tall
-  { id: "candle", src: "candle-amber", x: 802, bottom: 610, w: 38, aspect: 0.804, shadow: 40, flame: { fx: 0.49 } },
-  { id: "imac", src: "imac", x: 846, bottom: 609, w: 258, aspect: 1.25, shadow: 180,
+  { id: "books", html: "books", x: 712, bottom: 609, w: 110, h: 104 },   // eight spines, one per case study (labels + links per book)
+  { id: "candle", src: "candle-amber", x: 826, bottom: 610, w: 38, aspect: 0.804, shadow: 40, flame: { fx: 0.49 },
+    label: "make a wish", act: "candle" },
+  { id: "imac", src: "imac", x: 862, bottom: 609, w: 258, aspect: 1.25, shadow: 180,
+    label: "see my work", go: "#work",
     screen: [0.048, 0.072, 0.953, 0.68] },   // active display area (fractions), filled with a photo of Isha
-  { id: "mug", src: "mug-bears", x: 1030, bottom: 616, w: 54, aspect: 1.312, shadow: 54, steam: true },
-  { id: "plant", src: "plant-pot", x: 1082, bottom: 610, w: 130, aspect: 1.263, shadow: 84 },
+  { id: "mug", src: "mug-bears", x: 1040, bottom: 616, w: 54, aspect: 1.312, shadow: 54, steam: true,
+    label: "grab a coffee? let's chat", go: "#contact" },
+  { id: "plant", src: "plant-pot", x: 1090, bottom: 610, w: 130, aspect: 1.263, shadow: 84 },
 
   // ---- by the right wall: side table (~55cm tall, scaled to the desk) with a record player on it ----
   { id: "sidetable", src: "side-table", x: 1530, bottom: 962, w: 211, aspect: 0.836, shadow: 230 },
-  { id: "turntable", src: "turntable-pink", x: 1558, bottom: 736, w: 160, aspect: 1.11, shadow: 150 },
+  { id: "turntable", src: "turntable-pink", x: 1558, bottom: 736, w: 160, aspect: 1.11, shadow: 150,
+    label: "play music", act: "music" },
 
   // ---- desk chair, pulled up to the desk on the rug (~1.2x the desk's height): its back overlaps the drawers
-  //      and stops just under the desktop, so nothing on the desk is covered ----
-  { id: "chair", src: "chair", x: 793, bottom: 1012, w: 270, aspect: 0.693, shadow: 255 },
+  //      and stops just under the desktop. It starts turned toward the visitor and swings round to face the
+  //      screen as the zoom begins (scroll.js drives --turn) ----
+  { id: "chair", src: "chair", x: 809, bottom: 1012, w: 270, aspect: 0.693, shadow: 255, cls: "chair" },
 
   // ---- on the floor ----
-  { id: "cat", src: "cat-calico", x: 1065, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
-    p: { x: 1060, bottom: 1062, w: 200 } },   // on the rug, beside the chair
+  { id: "cat", src: "cat-calico", x: 1080, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
+    label: "pet me", act: "cat",
+    p: { x: 1076, bottom: 1062, w: 200 } },   // on the rug, beside the chair
+];
+
+// the books on the desk: one spine per case study, in case order
+const BOOKS = [
+  { go: "#rutgers", n: "01", title: "Rutgers NB & Careers", c: "#6B2129", h: 0.98 },
+  { go: "#sos", n: "02", title: "SOS Children's Villages", c: "#E9DCC7", h: 0.9 },
+  { go: "#rambandhu", n: "03", title: "Ram Bandhu", c: "#C98B5A", h: 1 },
+  { go: "#western", n: "04", title: "Western Equipments", c: "#5E7268", h: 0.86 },
+  { go: "#sigvaris", n: "05", title: "Sigvaris Novomed", c: "#EDB2BD", h: 0.94 },
+  { go: "#betterflour", n: "06", title: "The Better Flour", c: "#8A5A3B", h: 0.88 },
+  { go: "#skincare", n: "07", title: "Sukin & G&M", c: "#F1D97A", h: 0.96 },
+  { go: "#inicio", n: "08", title: "Inicio by Infra.Market", c: "#B9A28C", h: 0.84 },
 ];
 
 // Pictures whose cast shadow is pre-rendered (assets/cast/), drawn with the same look as the CSS
 // drop shadows but without a live blur, which is costly to redraw while the camera zooms.
 // CAST_PAD is the margin those images carry around the object, in canvas px.
-const CAST = new Set(["books-row", "candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair", "lamp-red"]);
+const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair", "lamp-red"]);
 const CAST_PAD = 48;
 
 // bulb centres on the string-lights image (fractions of its width/height)
@@ -95,6 +118,21 @@ function make(o) {
     el.appendChild(i);
   } else {
     el.appendChild($(`#tpl-${o.html}`).content.cloneNode(true));
+    if (o.html === "books") {
+      BOOKS.forEach((b, i) => {
+        const s = document.createElement("button");
+        s.type = "button"; s.className = "book hot"; s.dataset.go = b.go; s.dataset.label = `${b.n} · ${b.title}`;
+        s.setAttribute("aria-label", `Case study ${b.n}: ${b.title}`);
+        s.style.cssText = `--c:${b.c};--h:${b.h};--i:${i}`;
+        s.innerHTML = `<span class="book-n">${b.n}</span>`;
+        el.appendChild(s);
+      });
+    }
+    if (o.html === "calendar") {
+      const d = new Date();
+      el.querySelector(".cal-month").textContent = d.toLocaleString("en", { month: "short" }).toLowerCase();
+      el.querySelector(".cal-day").textContent = d.getDate();
+    }
     if (o.html === "note") {
       el.classList.add("note", `note-${o.tone}`); el.querySelector("p").innerHTML = o.text;
       if (o.tone !== "pink") el.querySelector(".tape").src = "assets/tape-gingham.webp";   // never pink tape on a pink note
@@ -114,6 +152,13 @@ function make(o) {
   if (o.bulbglow) el.insertAdjacentHTML("beforeend", `<span class="bulbglow"></span>`);
   if (o.bulbs) BULBS.forEach(([bx, by], n) => el.insertAdjacentHTML("beforeend",
     `<span class="twinkle" style="left:${bx * 100}%;top:${by * 100}%;--d:${-((n * 1.3) % 3)}s;--t:${2.6 + (n % 3) * 0.6}s"></span>`));
+  if (o.label) {   // clickable: a label on hover/focus, and an action or a section to go to (scroll.js handles both)
+    el.classList.add("hot");
+    el.tabIndex = 0; el.setAttribute("role", "button"); el.setAttribute("aria-label", o.label);
+    el.dataset.label = o.label;
+    if (o.go) el.dataset.go = o.go;
+    if (o.act) el.dataset.act = o.act;
+  }
   let shadow = null;
   if (o.shadow) { shadow = document.createElement("div"); shadow.className = "shadow"; scene.appendChild(shadow); }
   scene.appendChild(el);

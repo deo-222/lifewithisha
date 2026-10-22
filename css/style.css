@@ -169,7 +169,8 @@ img, video, iframe { display: block; max-width: 100%; }
 }
 
 /* ---------- vinyl: slow spin while it floats ---------- */
-.spin > .pic { animation: spin 9s linear infinite; }
+.spin > .pic { animation: spin 9s linear infinite; animation-play-state: paused; }   /* spins only while music plays */
+.music-on .spin > .pic { animation-play-state: running; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- floor lamp: warm pool of light on the wall ---------- */
@@ -203,7 +204,7 @@ img, video, iframe { display: block; max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .float, .glow, .flame, .steam path, .twinkle, .bulbglow, .spin > .pic { animation: none; }
+  .float, .glow, .flame, .steam path, .twinkle, .bulbglow, .spin > .pic, .hot::before, .hint-arrow { animation: none; }
   .steam path { opacity: .4; }
 }
 
@@ -218,11 +219,13 @@ img, video, iframe { display: block; max-width: 100%; }
 .topnav a { pointer-events: auto; text-decoration: none; }
 .wordmark { font: 800 21px/1 "Outfit", sans-serif; letter-spacing: -.035em; white-space: nowrap; }
 .topnav nav { display: flex; gap: 8px; }
-.topnav nav a {
-  font: 700 13px/1 "Space Mono", monospace; padding: 9px 14px; border-radius: 999px;
+.topnav nav a, .sound-toggle {
+  font: 700 13px/1 "Space Mono", monospace; padding: 9px 14px; border-radius: 999px; color: var(--ink);
   background: rgba(239, 230, 218, .82); backdrop-filter: blur(6px);
 }
-.topnav nav a:hover, .topnav nav a:focus-visible { background: var(--pink); }
+.sound-toggle { pointer-events: auto; border: 0; cursor: pointer; }
+.sound-toggle[aria-pressed="false"] { opacity: .65; }
+.topnav nav a:hover, .topnav nav a:focus-visible, .sound-toggle:hover { background: var(--pink); }
 a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid var(--burgundy); outline-offset: 3px; }
 
 /* ============================================================================
@@ -452,7 +455,7 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
   .topnav { padding: 12px 12px; }
   .wordmark { font-size: 18px; white-space: nowrap; }
   .topnav nav { gap: 4px; }
-  .topnav nav a { font-size: 10.5px; padding: 7px 8px; }
+  .topnav nav a, .sound-toggle { font-size: 10.5px; padding: 7px 8px; }
   .envelope { --ew: min(420px, 96vw); }
   .about-inner { grid-template-columns: 1fr; }
   .skill { flex-basis: calc(50% - 10px); }
@@ -576,3 +579,84 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .env-open:focus-visible .env-hint { outline: 3px solid var(--burgundy); outline-offset: 2px; }
 @keyframes hint-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
 @media (prefers-reduced-motion: reduce) { .env-hint { animation: none; } }
+
+/* ============================================================================
+   Interactive room: everything with a label can be clicked or tapped
+   ========================================================================== */
+.hot { cursor: pointer; }
+.hot:focus-visible { outline: calc(3px / var(--s)) solid var(--burgundy); outline-offset: calc(4px / var(--s)); }
+/* the label floats above the object at a constant on-screen size, whatever the room's scale */
+.hot::after {
+  content: attr(data-label); position: absolute; left: 50%; bottom: calc(100% + 10px / var(--s)); z-index: 30;
+  transform: translate(-50%, 4px) scale(calc(1 / var(--s))); transform-origin: 50% 100%;
+  padding: 7px 12px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+  background: #FBF8F2; color: var(--ink); font: 700 12px/1 "Space Mono", monospace;
+  box-shadow: 0 6px 16px rgba(60, 40, 22, .22); opacity: 0; transition: opacity .18s ease, transform .18s ease;
+}
+.hot:hover::after, .hot:focus-visible::after, .hot.show-label::after { opacity: 1; transform: translate(-50%, 0) scale(calc(1 / var(--s))); }
+/* first visit: a soft pulse on each clickable thing, three times, then it gets out of the way */
+.hot::before {
+  content: ""; position: absolute; left: 50%; top: 50%; width: calc(26px / var(--s)); height: calc(26px / var(--s));
+  margin: calc(-13px / var(--s)) 0 0 calc(-13px / var(--s)); border-radius: 50%; pointer-events: none; z-index: 2;
+  border: calc(2px / var(--s)) solid rgba(255, 255, 255, .95); box-shadow: 0 0 calc(10px / var(--s)) rgba(243, 201, 211, .9);
+  opacity: 0; animation: hot-pulse 1.6s ease-out 1.4s 3;
+}
+.book.hot::before { display: none; }
+@keyframes hot-pulse { 0% { opacity: 0; transform: scale(.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.9); } }
+.obj.hot:hover > .pic { filter: saturate(.9) sepia(.1) brightness(1.08) var(--cast); }
+.obj.hot.baked:hover > .pic { filter: saturate(.9) sepia(.1) brightness(1.08); }
+.obj.hung { filter: drop-shadow(-12px 18px 12px rgba(60, 40, 22, .22)); }   /* hangs still on the wall */
+
+/* books: eight spines, one per case study; each pops up on hover */
+.obj[data-id="books"] { display: flex; align-items: flex-end; gap: 0; }
+.book {
+  position: relative; flex: 1 1 0; height: calc(var(--h) * 100%); margin: 0; padding: 0; border: 0;
+  background: linear-gradient(transparent 16%, rgba(255, 255, 255, .35) 16% 20%, transparent 20%), var(--c);   /* a band across the spine */
+  border-radius: calc(2px / var(--s)) calc(2px / var(--s)) 0 0;
+  box-shadow: inset calc(-2px) 0 0 rgba(0, 0, 0, .14), inset 2px 0 0 rgba(255, 255, 255, .18), -3px 4px 4px rgba(55, 35, 18, .25);
+  transition: transform .22s cubic-bezier(.3, 1.6, .5, 1);
+  display: flex; align-items: flex-start; justify-content: center;
+}
+.book-n { margin-top: 30%; font: 700 7px/1 "Space Mono", monospace; color: rgba(42, 33, 27, .75); writing-mode: vertical-rl; transform: rotate(180deg); }
+.book:hover, .book:focus-visible { transform: translateY(-14%); z-index: 3; }
+
+/* calendar on the wall: tear-off pad */
+.calendar {
+  background: #FBF8F2; border-radius: 6px; display: flex; flex-direction: column; align-items: center; overflow: visible;
+  box-shadow: 0 2px 3px rgba(60, 40, 22, .18);
+}
+.cal-ring { position: absolute; top: -8px; left: 20%; right: 20%; height: 12px; border-top: 3px dotted #6d5a4b; }
+.cal-month { margin: 0; width: 100%; padding: 8% 0 6%; border-radius: 6px 6px 0 0; text-align: center;
+  background: var(--burgundy); color: #FBF8F2; font: 700 15px/1 "Space Mono", monospace; text-transform: lowercase; }
+.cal-day { margin: 6% 0 0; font: 800 40px/1 "Outfit", sans-serif; color: var(--ink); }
+.cal-note { margin: 4% 0 0; font: italic 400 14px/1 var(--script); color: var(--ink); }
+
+/* chair: turned toward the visitor until the zoom starts (scroll.js sets --turn) */
+.obj.chair { --turn: 34deg; transform: perspective(1400px) rotateY(var(--turn)); transform-origin: 50% 100%; }
+
+/* lamp switch: the room dims a little when it's off */
+.lampglow, .light { transition: opacity .5s ease, background .5s ease; }
+.lamp-off .lampglow { opacity: 0; }
+.lamp-off .light { background: rgba(28, 18, 10, .2); }
+
+/* candle: blown out for a moment, with a wisp of smoke */
+.glow, .flame { transition: opacity .3s ease, transform .3s ease; }
+.obj.out .glow, .obj.out .flame { opacity: 0; transform: scale(.4); }
+.smoke { position: absolute; left: 49%; top: -6%; width: 40%; height: 70%; pointer-events: none;
+  border-left: 3px solid rgba(255, 255, 255, .7); border-radius: 50%; filter: blur(2px); animation: smoke 1.4s ease-out forwards; }
+@keyframes smoke { from { opacity: .9; transform: translate(-50%, 0) scaleY(.4); } to { opacity: 0; transform: translate(-30%, -90%) scaleY(1.2) rotate(18deg); } }
+
+/* petting the cat: little hearts drift up */
+.heart { position: absolute; z-index: 20; pointer-events: none; color: #E58FA6; font: 400 28px/1 sans-serif; text-shadow: 0 2px 4px rgba(60, 40, 22, .2); }
+
+/* first-visit hint along the bottom of the room */
+.room-hint {
+  position: absolute; left: 50%; bottom: 22px; z-index: 6; transform: translateX(-50%); margin: 0;
+  padding: 9px 16px; border-radius: 999px; background: rgba(251, 248, 242, .9); color: var(--ink);
+  font: 700 12px/1 "Space Mono", monospace; white-space: nowrap; box-shadow: 0 6px 18px rgba(60, 40, 22, .18);
+  pointer-events: none; transition: opacity .3s ease;
+}
+.hint-arrow { display: inline-block; animation: hint-bob 1.6s ease-in-out infinite; }
+.hint-touch { display: none; }
+@media (hover: none) { .hint-touch { display: inline; } .hint-mouse { display: none; } }
+@media (max-width: 420px) { .room-hint { font-size: 10.5px; padding: 8px 12px; bottom: 16px; } }

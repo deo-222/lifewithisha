@@ -19,6 +19,7 @@ const ZOOM = {
                            // line up exactly, and a cross-fade would show both copies' slightly different letter
                            // edges at once. The last stretch is still, so the page never moves before the hand-off.
   phonePush: 0.3,         // phones only travel this far into the zoom
+  chair: [0, 0.14],       // the chair swings round to face the screen as soon as the scroll starts
 };
 const OUTRO = {
   length: 0.9,            // pinned scroll while the letter slides out, in viewport heights
@@ -27,18 +28,37 @@ const OUTRO = {
 };
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+const calm = matchMedia("(prefers-reduced-motion: reduce)");
 // Smooth scrolling: the page glides after the wheel or trackpad instead of stepping. Every scroll
 // animation below is tied to this smoothed position, so pins and animations always move together.
 // Touch screens keep their own native scrolling; reduced motion gets none.
 const smoother = matchMedia("(prefers-reduced-motion: reduce)").matches ? null
   : ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1.1, smoothTouch: false });
 const scrollToY = (y) => (smoother ? smoother.scrollTo(y, true) : window.scrollTo({ top: y, behavior: "smooth" }));
-// in-page links (nav, case pills) glide to their section
+// Getting around: in-page links (nav, case pills) and the room's objects all go through goTo().
+// From the room, it first plays the zoom into the screen at an even pace (so "about" or "contact"
+// get the same entrance as "work"), then glides on to the section.
+let zoomST = null;   // the room's zoom trigger, on desktop
+const scrollPos = () => (smoother ? smoother.scrollTop() : window.scrollY);
+function glide(to, dur, onComplete) {
+  if (smoother) return gsap.to(smoother, { scrollTop: to, duration: dur, ease: "power2.inOut", overwrite: true, onComplete });
+  const o = { y: window.scrollY };
+  return gsap.to(o, { y: to, duration: dur, ease: "power2.inOut", overwrite: true, onUpdate: () => window.scrollTo(0, o.y), onComplete });
+}
+function goTo(sel) {
+  const t = document.querySelector(sel); if (!t) return;
+  const y = smoother ? smoother.offset(t, "top top") : t.getBoundingClientRect().top + window.scrollY;
+  const cur = scrollPos(), legTime = (d) => Math.min(2.2, 0.6 + (Math.abs(d) / innerHeight) * 0.22);
+  if (calm.matches) return window.scrollTo(0, y);
+  if (zoomST && cur < zoomST.end - 4 && y > zoomST.end - 4) {
+    glide(zoomST.end, 2, () => { if (Math.abs(y - zoomST.end) > 4) glide(y, legTime(y - zoomST.end)); });
+  } else glide(y, legTime(y - cur));
+}
 document.addEventListener("click", (e) => {
-  const a = e.target.closest('a[href^="#"]'), t = a && document.querySelector(a.getAttribute("href"));
-  if (!t || !smoother) return;
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || !document.querySelector(a.getAttribute("href"))) return;
   e.preventDefault();
-  smoother.scrollTo(t, true, "top top");
+  goTo(a.getAttribute("href"));
 });
 const handoff = document.querySelector(".handoff");
 const workHead = document.querySelector("#work-head");
@@ -97,6 +117,12 @@ sizeSite();
 window.addEventListener("roomfit", () => { sizeSite(); applyZoom(zoomP); });
 
 const range = ([a, b], p) => Math.min(1, Math.max(0, (p - a) / (b - a)));
+// as the visit starts: the chair turns from the visitor to the screen, and the hint fades
+const chairEl = document.querySelector('.obj[data-id="chair"]'), hint = document.querySelector(".room-hint");
+function roomStart(t) {
+  chairEl.style.setProperty("--turn", `${34 * (1 - ease(t))}deg`);
+  hint.style.opacity = 1 - range([0, 0.6], t);
+}
 const fading = () => document.querySelectorAll('.obj.float, .obj[data-id="words"]');
 
 const mm = gsap.matchMedia();
@@ -104,12 +130,13 @@ const mm = gsap.matchMedia();
 /* ---------------- desktop / landscape ---------------- */
 mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", () => {
   document.documentElement.classList.add("zoom-on");
-  const st = ScrollTrigger.create({
+  const st = zoomST = ScrollTrigger.create({
     trigger: ".stage", start: "top top", end: () => `+=${innerHeight * ZOOM.length}`,
     pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true,   // no extra lag: the smoother already smooths it
     onUpdate(self) {
       const p = self.progress;
       applyZoom(range(ZOOM.push, p));
+      roomStart(range(ZOOM.chair, p));
       const t = range(ZOOM.fadeRoomText, p);
       fading().forEach((el) => { el.style.opacity = 1 - t; el.style.visibility = t >= 1 ? "hidden" : ""; });   // gone = not drawn
       const w = range(ZOOM.swap, p);
@@ -119,6 +146,7 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
     },
   });
   return () => {
+    zoomST = null; roomStart(0);
     st.kill(); applyZoom(0); handoff.style.opacity = 0; site.style.opacity = 0; photo.style.opacity = "";
     fading().forEach((el) => { el.style.opacity = ""; el.style.visibility = ""; });
     document.documentElement.classList.remove("zoom-on");
@@ -131,6 +159,7 @@ mm.add("(max-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
     trigger: ".stage", start: "top top", end: "bottom top", scrub: 0.4,
     onUpdate(self) {
       applyZoom(self.progress * ZOOM.phonePush);
+      roomStart(range([0, 0.15], self.progress));
       fading().forEach((el) => { el.style.opacity = 1 - range([0, 0.5], self.progress); });
     },
   });
@@ -305,7 +334,6 @@ document.querySelectorAll(".rail").forEach((r) => { if (!trio || !trio.contains(
 
 // a little burst of glitter stars wherever someone clicks
 const STARS = [0, 1, 2, 3, 4, 5].map((i) => `assets/star-${i}.webp`);
-const calm = matchMedia("(prefers-reduced-motion: reduce)");
 // only on a real tap or click: a touch that turns into a scroll is cancelled (or moves), so it doesn't sparkle
 let press = null;
 document.addEventListener("pointerdown", (e) => { press = { x: e.clientX, y: e.clientY, t: performance.now() }; }, { passive: true });
@@ -314,6 +342,7 @@ document.addEventListener("pointerup", (e) => {
   const p = press; press = null;
   if (!p || calm.matches || e.button > 0) return;
   if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10 || performance.now() - p.t > 600) return;
+  Sound.click();
   const n = 6 + Math.floor(Math.random() * 3);
   for (let i = 0; i < n; i++) {
     const s = document.createElement("img");
@@ -340,3 +369,64 @@ document.addEventListener("pointerup", (e) => {
       { scale: 1, rotation: 45, duration: 0.18, delay: 0.05 + i * 0.09, ease: "power2.out", yoyo: true, repeat: 1, onComplete: () => g.remove() });
   }
 }, { passive: true });
+
+/* ---------------- the room: every labelled object does something ---------------- */
+const roomScene = document.getElementById("scene");
+const touch = matchMedia("(hover: none)");
+let pets = 0;
+const ACTS = {
+  cat(el) {
+    pets++;
+    if (pets % 3 === 0) Sound.meow(); else Sound.purr();
+    gsap.fromTo(el, { scaleY: 0.95, scaleX: 1.02 }, { scaleY: 1, scaleX: 1, duration: 0.8, ease: "elastic.out(1, 0.4)", transformOrigin: "50% 100%" });
+    for (let i = 0; i < 3; i++) {   // a few hearts drift up from the cat
+      const h = document.createElement("span"); h.className = "heart"; h.textContent = "♡";
+      Object.assign(h.style, { left: `${el.offsetLeft + el.offsetWidth * (0.35 + 0.3 * Math.random())}px`, top: `${el.offsetTop + el.offsetHeight * 0.1}px` });
+      roomScene.appendChild(h);
+      gsap.fromTo(h, { y: 0, opacity: 0, scale: 0.6 }, { y: -90 - Math.random() * 40, x: (Math.random() - 0.5) * 50, opacity: 1, scale: 1,
+        duration: 1.4, delay: i * 0.18, ease: "power1.out", onComplete: () => h.remove() });
+      gsap.to(h, { opacity: 0, duration: 0.5, delay: i * 0.18 + 0.9 });
+    }
+  },
+  lamp() { roomScene.classList.toggle("lamp-off"); },
+  candle(el) {
+    if (el.classList.contains("out")) return;
+    el.classList.add("out");
+    const s = document.createElement("span"); s.className = "smoke"; el.appendChild(s);
+    setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
+  },
+  meet() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
+  music() {
+    if (!Sound.isOn()) setSound(true);
+    const now = Sound.toggleMusic();
+    document.querySelectorAll('[data-act="music"]').forEach((m) => {
+      m.dataset.label = now ? "pause music" : "play music"; m.setAttribute("aria-label", m.dataset.label);
+    });
+  },
+};
+function roomAct(el) {
+  if (el.dataset.go) goTo(el.dataset.go);
+  else if (ACTS[el.dataset.act]) ACTS[el.dataset.act](el);
+  if (touch.matches) {   // touch screens have no hover, so the label shows briefly after a tap
+    el.classList.add("show-label");
+    setTimeout(() => el.classList.remove("show-label"), 1400);
+  }
+}
+roomScene.addEventListener("click", (e) => {
+  const el = e.target.closest(".hot"); if (el) roomAct(el);
+});
+roomScene.addEventListener("keydown", (e) => {
+  const el = e.target.closest(".obj.hot");   // books are real buttons and get Enter/Space for free
+  if (el && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); roomAct(el); }
+});
+
+/* ---------------- the ♪ button: all sound on or off ---------------- */
+const soundBtn = document.querySelector(".sound-toggle");
+function setSound(v) {
+  Sound.setOn(v);
+  soundBtn.setAttribute("aria-pressed", v); soundBtn.setAttribute("aria-label", v ? "Sound on" : "Sound off");
+  soundBtn.textContent = v ? "♪ on" : "♪ off";
+  if (!v) document.querySelectorAll('[data-act="music"]').forEach((m) => { m.dataset.label = "play music"; m.setAttribute("aria-label", "play music"); });
+}
+setSound(Sound.isOn());
+soundBtn.addEventListener("click", () => setSound(!Sound.isOn()));
