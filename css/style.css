@@ -630,6 +630,8 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
   box-shadow: 0 6px 16px rgba(60, 40, 22, .22); opacity: 0; transition: opacity .18s ease, transform .18s ease;
 }
 .hot:hover::after, .hot:focus-visible::after, .hot.show-label::after { opacity: 1; transform: translate(-50%, 0) scale(calc(1 / var(--s))); }
+/* pieces near the top of the room show their label underneath, clear of the menu */
+.hot.label-below::after { bottom: auto; top: calc(100% + 10px / var(--s)); transform-origin: 50% 0; }
 /* floating pieces are tilted and drawn under the name: their label sits level, above everything else */
 .float.hot:hover, .float.hot:focus-visible { z-index: 31; }
 .float.hot::after { transform: translate(-50%, 4px) rotate(calc(-1 * var(--rot))) scale(calc(1 / var(--s))); }

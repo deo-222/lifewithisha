@@ -18,7 +18,7 @@ const ROOM = [
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
     label: "see the stories", go: "#work" },
   { id: "vinyl", src: "vinyl-midnights", x: 1342, bottom: 238, w: 148, aspect: 0.996, cls: "spin hung",   // spins while music plays
-    label: "my playlist ↗", act: "spotify" },
+    label: "my playlist ↗", act: "spotify", labelBelow: true },   // the menu sits above it
   // a small magnetic board (~45x58cm) with a letter in its envelope held up by a magnet
   { id: "board", html: "board", x: 1352, bottom: 480, w: 150, h: 196, cls: "hung",
     label: "let's connect ✉", act: "mail" },
@@ -176,6 +176,7 @@ function make(o) {
     el.dataset.label = o.label;
     if (o.go) el.dataset.go = o.go;
     if (o.act) el.dataset.act = o.act;
+    if (o.labelBelow) el.classList.add("label-below");
   }
   let shadow = null;
   if (o.shadow) { shadow = document.createElement("div"); shadow.className = "shadow"; scene.appendChild(shadow); }

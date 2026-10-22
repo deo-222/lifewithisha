@@ -421,7 +421,7 @@ const ACTS = {
     const s = document.createElement("span"); s.className = "smoke"; el.appendChild(s);
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
-  spotify() { openTab("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx"); },
+  spotify() { openTab("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx?si=m4vRnfMFS4iKwYTROt2PsA"); },
   mail() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   linkedin() { openTab("https://www.linkedin.com/in/ishadeo27"); },
   music() {
