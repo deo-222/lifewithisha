@@ -23,9 +23,6 @@ const ROOM = [
   { id: "vinyl", src: "vinyl-midnights", x: 1330, bottom: 330, w: 210, aspect: 0.996, cls: "spin hung",   // spins while music plays
     label: "my playlist ↗", act: "spotify",
     p: { x: 572, bottom: 455, w: 112 } },
-  { id: "calendar", html: "calendar", x: 1252, bottom: 578, w: 92, h: 104, cls: "hung",
-    label: "book a meeting", act: "meet",
-    p: { x: 1222, bottom: 388, w: 80, h: 90 } },
   { id: "bulb", src: "bulb", x: 1388, bottom: 566, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
     label: "what I'm good at", go: "#skills",
     p: { x: 1272, bottom: 640, w: 32 } },
@@ -125,11 +122,6 @@ function make(o) {
         s.innerHTML = `<span class="book-n">${b.n}</span>`;
         el.appendChild(s);
       });
-    }
-    if (o.html === "calendar") {
-      const d = new Date();
-      el.querySelector(".cal-month").textContent = d.toLocaleString("en", { month: "short" }).toLowerCase();
-      el.querySelector(".cal-day").textContent = d.getDate();
     }
     if (o.html === "note") {
       el.classList.add("note", `note-${o.tone}`); el.querySelector("p").innerHTML = o.text;

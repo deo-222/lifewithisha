@@ -412,7 +412,6 @@ const ACTS = {
   },
   spotify() { window.open("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx", "_blank", "noopener,noreferrer"); },
   linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
-  meet() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   music() {
     if (!Sound.isOn()) setSound(true);
     const now = Sound.toggleMusic();
