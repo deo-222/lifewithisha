@@ -12,7 +12,7 @@ const CANVAS = { w: 1920, h: 1881, view: 1080 };
 
 const ROOM = [
   // ---- on the wall. Only pieces that lead somewhere float; `label` + `go`/`act` make a piece clickable ----
-  { id: "painting", src: "painting-limes", x: 140, bottom: 336, w: 168, aspect: 0.8, cls: "hung" },
+  { id: "painting", src: "painting-limes-wall", x: 135, bottom: 497, w: 155, aspect: 0.5095, cls: "hung" },   // on the left wall, in its perspective
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
     label: "about Isha", go: "#about" },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
@@ -45,7 +45,7 @@ const ROOM = [
     screen: [0.048, 0.072, 0.953, 0.68] },   // active display area (fractions), filled with a photo of Isha
   { id: "mug", src: "mug-bears", x: 1040, bottom: 616, w: 54, aspect: 1.312, shadow: 54, steam: true,
     label: "coffee chat? find me on LinkedIn ↗", act: "linkedin" },
-  { id: "plant", src: "plant-anthurium", x: 1098, bottom: 611, w: 140, aspect: 0.891, shadow: 70 },
+  { id: "plant", src: "plant-anthurium", x: 1111, bottom: 611, w: 118, aspect: 0.891, shadow: 60, sway: 0.59 },   // leaves sway in a soft breeze
 
   // ---- by the right wall: side table (~55cm tall, scaled to the desk) with a record player on it ----
   { id: "sidetable", src: "side-table", x: 1530, bottom: 962, w: 211, aspect: 0.836, shadow: 230 },
@@ -66,7 +66,7 @@ const ROOM = [
 const DESK_DROP = 90, DESK_SHIFT = 40;   // on phones the desk and everything on it sit lower, and a little right of centre
 const desk = (x, bottom) => ({ x: x + DESK_SHIFT, bottom: bottom + DESK_DROP });
 const PHONE = {
-  painting: { x: 656, bottom: 250, w: 92 },   // top left, beside the name
+  painting: { src: "painting-limes", x: 656, bottom: 250, w: 92, h: 115 },   // top left on the back wall, so seen straight on
   words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
   "note-b": { x: 652, bottom: 452, w: 70, h: 70 },
   vinyl: { x: 735, bottom: 560, w: 122 },
@@ -81,7 +81,7 @@ const PHONE = {
   candle: desk(826, 610),
   imac: desk(862, 609),
   mug: desk(1040, 616),
-  plant: { ...desk(1104, 611), w: 116 },
+  plant: { ...desk(1114, 611), w: 98 },
   chair: desk(790, 1012),
   sidetable: { hide: true },
   turntable: { hide: true },
@@ -132,8 +132,13 @@ function make(o) {
       Object.assign(c.style, { left: `${-px}%`, top: `${-py}%`, width: `${100 + 2 * px}%`, height: `${100 + 2 * py}%` });
       el.classList.add("baked"); el.appendChild(c);
     }
-    const i = new Image(); i.className = "pic"; i.src = `assets/${o.src}.webp`; i.alt = ""; i.decoding = "async";
+    const i = new Image(); i.className = "pic"; i.src = `assets/${o.src}${o.sway ? "-pot" : ""}.webp`; i.alt = ""; i.decoding = "async";
     el.appendChild(i);
+    if (o.sway) {   // the leaves are a separate layer that sways from the pot rim (o.sway = rim height, as a fraction)
+      const l = new Image(); l.className = "pic leaves"; l.src = `assets/${o.src}-leaves.webp`; l.alt = ""; l.decoding = "async";
+      l.style.transformOrigin = `58% ${o.sway * 100}%`;
+      el.appendChild(l);
+    }
   } else {
     el.appendChild($(`#tpl-${o.html}`).content.cloneNode(true));
     if (o.html === "books") {
@@ -184,6 +189,8 @@ function layout() {
     const q = pm && o.p ? { ...o, ...o.p } : o;
     el.hidden = !!q.hide; if (shadow) shadow.hidden = !!q.hide;
     if (q.k) el.style.setProperty("--k", q.k);
+    const pic = el.querySelector(".pic:not(.cast)");
+    if (pic && o.src && !o.sway && pic.getAttribute("src") !== `assets/${q.src}.webp`) pic.src = `assets/${q.src}.webp`;   // a phone version of the picture
     if (o.bulbs) el.style.setProperty("--g", `${Math.round(q.w * 0.24)}px`);   // bulb glow scales with the string
     const h = q.h || q.w / o.aspect;
     Object.assign(el.style, { left: `${q.x}px`, top: `${q.bottom - h}px`, width: `${q.w}px`, height: `${h}px` });

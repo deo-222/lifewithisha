@@ -40,6 +40,10 @@ img, video, iframe { display: block; max-width: 100%; }
 .obj.cat > .pic { transform-origin: 50% 100%; animation: breathe 3s ease-in-out infinite; }
 @keyframes breathe { 0%, 100% { transform: scale(1, 1); } 45% { transform: scale(1.005, 1.02); } }   /* a gentle rise, barely any growth */
 @media (prefers-reduced-motion: reduce) { .obj.cat > .pic { animation: none; } }
+/* the plant's leaves sway slowly, as if in a soft breeze: a sideways lean pivoting at the pot rim, so the pot stays still */
+.obj > .pic.leaves { position: absolute; left: 0; top: 0; animation: breeze 7.5s ease-in-out infinite alternate, breeze-lift 5.3s ease-in-out infinite alternate; }
+@keyframes breeze { from { transform: skewX(1.2deg); } to { transform: skewX(-1.4deg); } }
+@keyframes breeze-lift { from { scale: 1 1; } to { scale: 1.006 1.014; } }
 .obj.lamp > .pic { filter: saturate(1.05) contrast(1.04) var(--cast); }   /* keep the lacquered red rich, not sepia */
 /* most pictures carry their cast shadow as a pre-rendered image (room.js), so no live drop shadow */
 .obj.baked { --cast: ; }
@@ -234,7 +238,7 @@ img, video, iframe { display: block; max-width: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .float, .glow, .flame, .steam path, .twinkle, .bulbglow, .spin > .pic, .hot::before, .hint-arrow { animation: none; }
+  .float, .glow, .flame, .steam path, .twinkle, .bulbglow, .spin > .pic, .pic.leaves, .hot::before, .hint-arrow { animation: none; }
   .steam path { opacity: .4; }
 }
 
