@@ -2,7 +2,7 @@
    Sound: a soft click, a purr and a meow for the cat, and a gentle lo-fi loop for the
    record player. Everything is synthesised with the Web Audio API, so there are no audio
    files (and nothing to license). Sound starts only after the visitor's first click, as
-   browsers require, and the ♪ button in the nav turns all of it on or off.
+   browsers require. The ♪ button in the nav turns all of it on or off (on phones it plays the music).
    ========================================================================== */
 
 const Sound = (() => {
@@ -14,6 +14,7 @@ const Sound = (() => {
     if (!ctx) {
       const AC = window.AudioContext || window.webkitAudioContext;
       if (!AC) return null;
+      try { if (navigator.audioSession) navigator.audioSession.type = "playback"; } catch (e) { /* older Safari */ }   // iPhones: play through the silent switch
       ctx = new AC(); master = ctx.createGain(); master.gain.value = on ? 1 : 0; master.connect(ctx.destination);
     }
     if (ctx.state === "suspended") ctx.resume();

@@ -415,10 +415,8 @@ const ACTS = {
   linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
   music() {
     if (!Sound.isOn()) setSound(true);
-    const now = Sound.toggleMusic();
-    document.querySelectorAll('[data-act="music"]').forEach((m) => {
-      m.dataset.label = now ? "pause music" : "play music"; m.setAttribute("aria-label", m.dataset.label);
-    });
+    Sound.toggleMusic();
+    showMusic();
   },
 };
 function roomAct(el) {
@@ -438,12 +436,25 @@ roomScene.addEventListener("keydown", (e) => {
 });
 
 /* ---------------- the ♪ button: all sound on or off ---------------- */
+// The ♪ button: on desktop it turns all sound on or off (the record player plays the music).
+// Phones have no record player, so there it plays and pauses the music instead.
 const soundBtn = document.querySelector(".sound-toggle");
-function setSound(v) {
-  Sound.setOn(v);
-  soundBtn.setAttribute("aria-pressed", v); soundBtn.setAttribute("aria-label", v ? "Sound on" : "Sound off");
-  soundBtn.textContent = v ? "♪ on" : "♪ off";
-  if (!v) document.querySelectorAll('[data-act="music"]').forEach((m) => { m.dataset.label = "play music"; m.setAttribute("aria-label", "play music"); });
+const phone = matchMedia("(max-aspect-ratio: 11/10)");
+function showMusic() {
+  const now = Sound.playing();
+  document.querySelectorAll('[data-act="music"]').forEach((m) => {
+    m.dataset.label = now ? "pause music" : "play music"; m.setAttribute("aria-label", m.dataset.label);
+  });
+  if (!phone.matches) {
+    const v = Sound.isOn();
+    soundBtn.setAttribute("aria-pressed", v); soundBtn.setAttribute("aria-label", v ? "Sound on" : "Sound off");
+    soundBtn.textContent = v ? "♪ on" : "♪ off";
+  } else {
+    soundBtn.setAttribute("aria-pressed", now); soundBtn.setAttribute("aria-label", now ? "Pause music" : "Play music");
+    soundBtn.textContent = now ? "♪ stop" : "♪ play";
+  }
 }
-setSound(Sound.isOn());
-soundBtn.addEventListener("click", () => setSound(!Sound.isOn()));
+function setSound(v) { Sound.setOn(v); showMusic(); }
+showMusic();
+phone.addEventListener("change", showMusic);
+soundBtn.addEventListener("click", () => (phone.matches ? ACTS.music() : setSound(!Sound.isOn())));
