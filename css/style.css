@@ -169,8 +169,7 @@ img, video, iframe { display: block; max-width: 100%; }
 }
 
 /* ---------- vinyl: slow spin while it floats ---------- */
-.spin > .pic { animation: spin 9s linear infinite; animation-play-state: paused; }   /* spins only while music plays */
-.music-on .spin > .pic { animation-play-state: running; }
+.spin > .pic { animation: spin 9s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- floor lamp: warm pool of light on the wall ---------- */
@@ -631,17 +630,7 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .cal-day { margin: 6% 0 0; font: 800 40px/1 "Outfit", sans-serif; color: var(--ink); }
 .cal-note { margin: 4% 0 0; font: italic 400 14px/1 var(--script); color: var(--ink); }
 
-/* chair: three views. It faces the visitor three-quarter on, turns side-on, then shows its back as it
-   faces the screen (scroll.js sets data-pose as the zoom starts) */
-.chair-pose {
-  position: absolute; left: 50%; bottom: 0; height: 100%; max-width: none; transform: translateX(-50%); pointer-events: none;
-  filter: saturate(.9) sepia(.1) brightness(1.01) drop-shadow(-16px 10px 12px rgba(55, 35, 18, .38)) drop-shadow(-4px 3px 3px rgba(55, 35, 18, .3));
-  opacity: 0; transition: opacity .12s linear;
-}
-.obj.chair > .pic, .obj.chair > .cast { transition: opacity .12s linear; }
-.obj.chair:not([data-pose="2"]) > .pic, .obj.chair:not([data-pose="2"]) > .cast { opacity: 0; }
-.obj.chair[data-pose="0"] > .chair-pose[data-f="0"], .obj.chair[data-pose="1"] > .chair-pose[data-f="1"] { opacity: 1; }
-.obj.chair { transform-origin: 50% 100%; }
+
 
 /* lamp switch: the room dims a little when it's off */
 .lampglow, .light { transition: opacity .5s ease, background .5s ease; }

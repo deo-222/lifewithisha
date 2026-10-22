@@ -104,7 +104,10 @@ const Sound = (() => {
     bus.connect(lp).connect(master);
     crackle = ctx.createBufferSource(); const b = ctx.createBuffer(1, ctx.sampleRate * 3, ctx.sampleRate), d = b.getChannelData(0);
     for (let i = 0; i < d.length; i++) d[i] = Math.random() < 0.0009 ? (Math.random() * 2 - 1) * 0.6 : (Math.random() * 2 - 1) * 0.004;
-    crackle.buffer = b; crackle.loop = true; crackle.connect(bus); crackle.start();
+    // the needle-drop crackle plays for the first few seconds, then fades out under the music
+    const cg = ctx.createGain(), t0 = ctx.currentTime;
+    cg.gain.setValueAtTime(1, t0); cg.gain.setValueAtTime(1, t0 + 3); cg.gain.linearRampToValueAtTime(0, t0 + 4.5);
+    crackle.buffer = b; crackle.loop = true; crackle.connect(cg).connect(bus); crackle.start(); crackle.stop(t0 + 4.6);
     next = ctx.currentTime + 0.1; step = 0; schedule(); timer = setInterval(schedule, 120);
     document.documentElement.classList.add("music-on");
   }

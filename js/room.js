@@ -52,7 +52,7 @@ const ROOM = [
     label: "see my work", go: "#work",
     screen: [0.048, 0.072, 0.953, 0.68] },   // active display area (fractions), filled with a photo of Isha
   { id: "mug", src: "mug-bears", x: 1040, bottom: 616, w: 54, aspect: 1.312, shadow: 54, steam: true,
-    label: "grab a coffee? let's chat", go: "#contact" },
+    label: "coffee chat? find me on LinkedIn ↗", act: "linkedin" },
   { id: "plant", src: "plant-pot", x: 1090, bottom: 610, w: 130, aspect: 1.263, shadow: 84 },
 
   // ---- by the right wall: side table (~55cm tall, scaled to the desk) with a record player on it ----
@@ -60,11 +60,8 @@ const ROOM = [
   { id: "turntable", src: "turntable-pink", x: 1558, bottom: 736, w: 160, aspect: 1.11, shadow: 150,
     label: "play music", act: "music" },
 
-  // ---- desk chair, pulled up to the desk on the rug (~1.2x the desk's height): its back overlaps the drawers
-  //      and stops just under the desktop. It starts turned toward the visitor and swings round to face the
-  //      screen as the zoom begins (scroll.js drives --turn) ----
-  { id: "chair", src: "chair", x: 809, bottom: 1012, w: 270, aspect: 0.693, shadow: 255, cls: "chair",
-    poses: [["chair-3q", 0.829], ["chair-side", 0.726]] },   // turned toward the visitor, then side-on; the back view is `src`
+  // ---- desk chair on the rug, in front of the desk (~1.2x the desk's height) ----
+  { id: "chair", src: "chair-3q", x: 790, bottom: 1012, w: 323, aspect: 0.829, shadow: 270 },   // turned three-quarter toward the visitor
 
   // ---- on the floor ----
   { id: "cat", src: "cat-calico", x: 1080, bottom: 1066, w: 261, aspect: 1.702, shadow: 250, cls: "cat",
@@ -87,7 +84,7 @@ const BOOKS = [
 // Pictures whose cast shadow is pre-rendered (assets/cast/), drawn with the same look as the CSS
 // drop shadows but without a live blur, which is costly to redraw while the camera zooms.
 // CAST_PAD is the margin those images carry around the object, in canvas px.
-const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair", "lamp-red"]);
+const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "lamp-red"]);
 const CAST_PAD = 48;
 
 // bulb centres on the string-lights image (fractions of its width/height)
@@ -139,14 +136,6 @@ function make(o) {
       if (o.tone !== "pink") el.querySelector(".tape").src = "assets/tape-gingham.webp";   // never pink tape on a pink note
     }
     else el.classList.add(o.html);
-  }
-  if (o.poses) {   // extra views of the chair, swapped in by scroll.js as it turns
-    el.dataset.pose = "0";
-    o.poses.forEach(([src, aspect], i) => {
-      const f = new Image(); f.className = "chair-pose"; f.dataset.f = i; f.src = `assets/${src}.webp`; f.alt = ""; f.decoding = "async";
-      f.style.width = `${(aspect / o.aspect) * 100}%`;   // same height as the back view, centred on it
-      el.appendChild(f);
-    });
   }
   if (o.flame) el.insertAdjacentHTML("beforeend", `<span class="glow" style="left:${o.flame.fx * 100}%"></span><span class="flame" style="left:${o.flame.fx * 100}%"></span>`);
   if (o.steam) el.appendChild($("#tpl-steam").content.cloneNode(true));

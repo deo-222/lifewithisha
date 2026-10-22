@@ -117,14 +117,9 @@ sizeSite();
 window.addEventListener("roomfit", () => { sizeSite(); applyZoom(zoomP); });
 
 const range = ([a, b], p) => Math.min(1, Math.max(0, (p - a) / (b - a)));
-// as the visit starts: the chair turns from the visitor to the screen, and the hint fades
-const chairEl = document.querySelector('.obj[data-id="chair"]'), hint = document.querySelector(".room-hint");
+// as the visit starts, the hint fades
+const hint = document.querySelector(".room-hint");
 function roomStart(t) {
-  // three-quarter → side-on → back to us; a slight squeeze at each swap reads as the seat turning
-  const pose = t < 0.34 ? 0 : t < 0.68 ? 1 : 2;
-  if (chairEl.dataset.pose !== String(pose)) chairEl.dataset.pose = pose;
-  const seg = (t * 3) % 1, squeeze = t > 0 && t < 1 ? 0.07 * Math.sin(Math.PI * seg) : 0;
-  chairEl.style.transform = `scaleX(${1 - squeeze})`;
   hint.style.opacity = 1 - range([0, 0.6], t);
 }
 const fading = () => document.querySelectorAll('.obj.float, .obj[data-id="words"]');
@@ -400,6 +395,7 @@ const ACTS = {
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
   spotify() { window.open("https://open.spotify.com/playlist/2FHVNSH2EzrzBsci3A5ERx", "_blank", "noopener,noreferrer"); },
+  linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
   meet() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   music() {
     if (!Sound.isOn()) setSound(true);
