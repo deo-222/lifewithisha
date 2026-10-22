@@ -97,14 +97,14 @@ img, video, iframe { display: block; max-width: 100%; }
   box-shadow: inset 2px 2px 4px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(0, 0, 0, .3);
 }
 .pinned {
-  position: absolute; left: 50%; top: 15%; width: 74%; aspect-ratio: 150 / 205;
+  position: absolute; left: 50%; top: 21%; width: 52%; aspect-ratio: 150 / 205;
   transform: translateX(-50%) rotate(-3deg); filter: drop-shadow(-3px 3px 3px rgba(30, 24, 20, .35));
 }
 .letter-paper {
   position: absolute; left: 4%; top: 0; width: 92%; height: 84%;
   background: url("../assets/letter-paper.webp") center / cover; transition: transform .35s ease;
 }
-.letter-paper p { margin: 22% 0 0; text-align: center; font: italic 400 12cqw/1 var(--script); color: var(--ink); }
+.letter-paper p { margin: 22% 0 0; text-align: center; font: italic 400 8.5cqw/1 var(--script); color: var(--ink); }
 .board:hover .letter-paper, .board:focus-visible .letter-paper { transform: translateY(-6%); }   /* the letter peeks up out of the envelope */
 .pinned .env { position: absolute; left: 0; bottom: 0; width: 100%; display: block; }
 .pinned .magnet { position: absolute; left: 50%; top: -4%; width: 15%; transform: translateX(-50%); filter: drop-shadow(-2px 2px 2px rgba(0, 0, 0, .35)); }
