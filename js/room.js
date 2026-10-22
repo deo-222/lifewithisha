@@ -74,7 +74,7 @@ const PHONE = {
   megaphone: { x: 1050, bottom: 472, w: 60 },
   board: { x: 1150, bottom: 468, w: 102, h: 133 },
   "note-a": { x: 1180, bottom: 584, w: 76, h: 76 },   // a clear gap below the board, clear of the plant
-  floorlamp: { x: 642, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
+  floorlamp: { x: 616, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
   rug: desk(490, 1076),
   desk: desk(700, 930),
   books: desk(712, 609),
@@ -85,7 +85,7 @@ const PHONE = {
   chair: desk(790, 1012),
   sidetable: { hide: true },
   turntable: { hide: true },
-  cat: { x: 1000, bottom: 1250, w: 240 },   // in front of the chair, on the right
+  cat: { x: 1024, bottom: 1150, w: 232 },   // on the rug, beside the chair
 };
 ROOM.forEach((o) => { if (PHONE[o.id]) o.p = PHONE[o.id]; });
 
