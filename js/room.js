@@ -23,10 +23,10 @@ const ROOM = [
   { id: "vinyl", src: "vinyl-midnights", x: 1342, bottom: 238, w: 148, aspect: 0.996, cls: "spin hung",   // spins while music plays
     label: "my playlist ↗", act: "spotify",
     p: { x: 572, bottom: 455, w: 112 } },
-  // a magnetic board (~65x85cm) with a letter in its envelope held up by a magnet
-  { id: "board", html: "board", x: 1306, bottom: 566, w: 220, h: 288, cls: "hung",
+  // a small magnetic board (~45x58cm) with a letter in its envelope held up by a magnet
+  { id: "board", html: "board", x: 1352, bottom: 480, w: 150, h: 196, cls: "hung",
     label: "let's connect ✉", act: "mail",
-    p: { x: 1210, bottom: 400, w: 118, h: 154 } },
+    p: { x: 1232, bottom: 392, w: 88, h: 115 } },
   { id: "bulb", src: "bulb", x: 1232, bottom: 470, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
     label: "what I'm good at", go: "#skills",
     p: { x: 1272, bottom: 640, w: 32 } },
