@@ -630,6 +630,10 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
   box-shadow: 0 6px 16px rgba(60, 40, 22, .22); opacity: 0; transition: opacity .18s ease, transform .18s ease;
 }
 .hot:hover::after, .hot:focus-visible::after, .hot.show-label::after { opacity: 1; transform: translate(-50%, 0) scale(calc(1 / var(--s))); }
+/* floating pieces are tilted and drawn under the name: their label sits level, above everything else */
+.float.hot:hover, .float.hot:focus-visible { z-index: 31; }
+.float.hot::after { transform: translate(-50%, 4px) rotate(calc(-1 * var(--rot))) scale(calc(1 / var(--s))); }
+.float.hot:hover::after, .float.hot:focus-visible::after { transform: translate(-50%, 0) rotate(calc(-1 * var(--rot))) scale(calc(1 / var(--s))); }
 /* first visit: a soft pulse on each clickable thing, three times, then it gets out of the way */
 .hot::before {
   content: ""; position: absolute; left: 50%; top: 50%; width: calc(26px / var(--s)); height: calc(26px / var(--s));

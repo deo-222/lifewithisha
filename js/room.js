@@ -12,7 +12,7 @@ const CANVAS = { w: 1920, h: 1881, view: 1080 };
 
 const ROOM = [
   // ---- on the wall. Only pieces that lead somewhere float; `label` + `go`/`act` make a piece clickable ----
-  { id: "painting", src: "painting-framed", x: 110, bottom: 330, w: 230, aspect: 1.191, cls: "hung" },
+  { id: "painting", src: "painting-limes", x: 140, bottom: 336, w: 168, aspect: 0.8, cls: "hung" },
   { id: "note-b", html: "note", text: "brand<br>voice ♡", tone: "pink", x: 208, bottom: 637, w: 110, h: 110, float: { rot: -7, dur: 7.5, delay: -5 },
     label: "about Isha", go: "#about" },
   { id: "note-a", html: "note", text: "stories that<br>stick", tone: "yellow", x: 1620, bottom: 300, w: 114, h: 114, float: { rot: 5, dur: 6.5, delay: -3 },
@@ -22,7 +22,7 @@ const ROOM = [
   // a small magnetic board (~45x58cm) with a letter in its envelope held up by a magnet
   { id: "board", html: "board", x: 1352, bottom: 480, w: 150, h: 196, cls: "hung",
     label: "let's connect ✉", act: "mail" },
-  { id: "bulb", src: "bulb", x: 1232, bottom: 470, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
+  { id: "bulb", src: "bulb", x: 1250, bottom: 500, w: 45, aspect: 0.662, float: { rot: 8, dur: 6.2, delay: -1.5 }, bulbglow: true,
     label: "what I'm good at", go: "#skills" },
   { id: "megaphone", src: "megaphone", x: 1600, bottom: 470, w: 80, aspect: 1.014, float: { rot: -6, dur: 7.2, delay: -3.5 },
     label: "say hi", go: "#contact" },
@@ -45,7 +45,7 @@ const ROOM = [
     screen: [0.048, 0.072, 0.953, 0.68] },   // active display area (fractions), filled with a photo of Isha
   { id: "mug", src: "mug-bears", x: 1040, bottom: 616, w: 54, aspect: 1.312, shadow: 54, steam: true,
     label: "coffee chat? find me on LinkedIn ↗", act: "linkedin" },
-  { id: "plant", src: "plant-pot", x: 1090, bottom: 610, w: 130, aspect: 1.263, shadow: 84 },
+  { id: "plant", src: "plant-anthurium", x: 1098, bottom: 611, w: 140, aspect: 0.891, shadow: 70 },
 
   // ---- by the right wall: side table (~55cm tall, scaled to the desk) with a record player on it ----
   { id: "sidetable", src: "side-table", x: 1530, bottom: 962, w: 211, aspect: 0.836, shadow: 230 },
@@ -66,14 +66,14 @@ const ROOM = [
 const DESK_DROP = 90, DESK_SHIFT = 40;   // on phones the desk and everything on it sit lower, and a little right of centre
 const desk = (x, bottom) => ({ x: x + DESK_SHIFT, bottom: bottom + DESK_DROP });
 const PHONE = {
-  painting: { hide: true },
+  painting: { x: 656, bottom: 250, w: 92 },   // top left, beside the name
   words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
   "note-b": { x: 652, bottom: 452, w: 70, h: 70 },
   vinyl: { x: 735, bottom: 560, w: 122 },
   bulb: { x: 944, bottom: 468, w: 34 },
   megaphone: { x: 1050, bottom: 472, w: 60 },
-  board: { x: 1150, bottom: 468, w: 102, h: 133 },
-  "note-a": { x: 1180, bottom: 584, w: 76, h: 76 },   // a clear gap below the board, clear of the plant
+  board: { x: 1162, bottom: 458, w: 100, h: 131 },
+  "note-a": { x: 1182, bottom: 562, w: 74, h: 74 },   // a clear gap below the board, clear of the plant
   floorlamp: { x: 616, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
   rug: desk(490, 1076),
   desk: desk(700, 930),
@@ -81,7 +81,7 @@ const PHONE = {
   candle: desk(826, 610),
   imac: desk(862, 609),
   mug: desk(1040, 616),
-  plant: desk(1090, 610),
+  plant: { ...desk(1104, 611), w: 116 },
   chair: desk(790, 1012),
   sidetable: { hide: true },
   turntable: { hide: true },
@@ -104,7 +104,7 @@ const BOOKS = [
 // Pictures whose cast shadow is pre-rendered (assets/cast/), drawn with the same look as the CSS
 // drop shadows but without a live blur, which is costly to redraw while the camera zooms.
 // CAST_PAD is the margin those images carry around the object, in canvas px.
-const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair-3q", "lamp-red"]);
+const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-anthurium", "desk-console", "side-table", "turntable-pink", "chair-3q", "lamp-red"]);
 const CAST_PAD = 48;
 
 // bulb centres on the string-lights image (fractions of its width/height)

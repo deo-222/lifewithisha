@@ -27,34 +27,41 @@ const OUTRO = {
   scrub: 1.2,             // seconds the animation takes to catch up with the scroll (higher = smoother)
 };
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
+gsap.registerPlugin(ScrollTrigger);
 const calm = matchMedia("(prefers-reduced-motion: reduce)");
-// Smooth scrolling: the page glides after the wheel or trackpad instead of stepping. Every scroll
-// animation below is tied to this smoothed position, so pins and animations always move together.
+// Smooth scrolling (Lenis): the page glides after the wheel or trackpad instead of stepping. Lenis runs on
+// GSAP's clock and tells ScrollTrigger about every step, so pins and animations always move with it.
 // Touch screens keep their own native scrolling; reduced motion gets none.
-const smoother = matchMedia("(prefers-reduced-motion: reduce)").matches ? null
-  : ScrollSmoother.create({ wrapper: "#smooth-wrapper", content: "#smooth-content", smooth: 1.1, smoothTouch: false });
-const scrollToY = (y) => (smoother ? smoother.scrollTo(y, true) : window.scrollTo({ top: y, behavior: "smooth" }));
+const lenis = calm.matches ? null : new Lenis({ lerp: 0.085 });
+if (lenis) {
+  lenis.on("scroll", ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+const scrollToY = (y) => (lenis ? lenis.scrollTo(y) : window.scrollTo({ top: y, behavior: "smooth" }));
 // Getting around: in-page links (nav, case pills) and the room's objects all go through goTo().
 // From the room, it first plays the zoom into the screen at an even pace (so "about" or "contact"
 // get the same entrance as "work"), then glides on to the section.
 let zoomST = null;   // the room's zoom trigger, on desktop
-const scrollPos = () => (smoother ? smoother.scrollTop() : window.scrollY);
+const scrollPos = () => (lenis ? lenis.scroll : window.scrollY);
+const inOut = (t) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);   // power2.inOut
 let gliding = null;   // the current glide, so the visitor's own scrolling can take over at once
 function glide(to, dur, onComplete) {
-  if (gliding) gliding.kill();
-  if (smoother) return (gliding = gsap.to(smoother, { scrollTop: to, duration: dur, ease: "power2.inOut", onComplete }));
+  stopGlide();
+  const me = (gliding = { tween: null });
+  const done = () => { if (gliding === me) { gliding = null; if (onComplete) onComplete(); } };
+  if (lenis) return lenis.scrollTo(to, { duration: dur, easing: inOut, force: true, onComplete: done });
   const o = { y: window.scrollY };
-  return (gliding = gsap.to(o, { y: to, duration: dur, ease: "power2.inOut", onUpdate: () => window.scrollTo(0, o.y), onComplete }));
+  me.tween = gsap.to(o, { y: to, duration: dur, ease: "power2.inOut", onUpdate: () => window.scrollTo(0, o.y), onComplete: done });
 }
 // any scrolling of their own cancels a glide (and the second leg queued after it), instead of fighting it
-const stopGlide = () => { if (gliding) { gliding.kill(); gliding = null; } };
+const stopGlide = () => { if (gliding) { if (gliding.tween) gliding.tween.kill(); gliding = null; } };
 addEventListener("wheel", stopGlide, { passive: true });
 addEventListener("touchstart", stopGlide, { passive: true });
 addEventListener("keydown", (e) => { if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) stopGlide(); });
 function goTo(sel) {
   const t = document.querySelector(sel); if (!t) return;
-  const y = smoother ? smoother.offset(t, "top top") : t.getBoundingClientRect().top + window.scrollY;
+  const y = t.getBoundingClientRect().top + window.scrollY;
   const cur = scrollPos(), legTime = (d) => Math.min(2.2, 0.6 + (Math.abs(d) / innerHeight) * 0.22);
   if (calm.matches) return window.scrollTo(0, y);
   if (zoomST && cur < zoomST.end - 4 && y > zoomST.end - 4) {
@@ -139,7 +146,7 @@ mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", 
   document.documentElement.classList.add("zoom-on");
   const st = zoomST = ScrollTrigger.create({
     trigger: ".stage", start: "top top", end: () => `+=${innerHeight * ZOOM.length}`,
-    pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true,   // no extra lag: the smoother already smooths it
+    pin: true, pinSpacing: false, scrub: true, invalidateOnRefresh: true,   // no extra lag: Lenis already smooths it
     onUpdate(self) {
       const p = self.progress;
       applyZoom(range(ZOOM.push, p));
@@ -220,7 +227,7 @@ env.querySelector(".env-open").addEventListener("click", () => {
 });
 
 mm.add("(min-aspect-ratio: 11/10) and (prefers-reduced-motion: no-preference)", () => {
-  const scrub = smoother ? true : OUTRO.scrub;   // with smooth scrolling, scrub lag would let the pin and the letter drift apart
+  const scrub = lenis ? true : OUTRO.scrub;   // with smooth scrolling, scrub lag would let the pin and the letter drift apart
   envelopeIn({ trigger: stageC, start: "top bottom", end: "top top", scrub, invalidateOnRefresh: true });
   letterOut({ trigger: stageC, start: "top top", end: () => `+=${innerHeight * OUTRO.length}`,
     pin: true, scrub, invalidateOnRefresh: true });
@@ -389,6 +396,10 @@ ScrollTrigger.addEventListener("scrollEnd", () => document.documentElement.class
 const roomScene = document.getElementById("scene");
 const touch = matchMedia("(hover: none)");
 let pets = 0;
+// outside links open as an ordinary new-tab link: Safari treats window.open with options as a pop-up and can block it
+function openTab(href) {
+  Object.assign(document.createElement("a"), { href, target: "_blank", rel: "noopener noreferrer" }).click();
+}
 const ACTS = {
   cat(el) {
     pets++;
@@ -410,9 +421,9 @@ const ACTS = {
     const s = document.createElement("span"); s.className = "smoke"; el.appendChild(s);
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
-  spotify() { window.open("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx", "_blank", "noopener,noreferrer"); },
+  spotify() { openTab("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx"); },
   mail() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
-  linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
+  linkedin() { openTab("https://www.linkedin.com/in/ishadeo27"); },
   music() {
     if (!Sound.isOn()) setSound(true);
     Sound.toggleMusic();
