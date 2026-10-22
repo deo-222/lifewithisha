@@ -114,6 +114,7 @@ img, video, iframe { display: block; max-width: 100%; }
 .note-yellow { background: linear-gradient(160deg, #F8E58C, #EFD56A); }
 .note-pink   { background: linear-gradient(160deg, #F6C7CF, #EDB2BD); }
 .note p { margin: 12% 0 0; font: italic 400 17cqw/1.05 var(--script); color: var(--ink); }
+@media (max-aspect-ratio: 11/10) { .note p { font: 700 16cqw/1.05 var(--script); } }   /* phones: bold, so the small notes still read */
 .tape { position: absolute; display: block; }
 .tape-n { width: 74px; left: 50%; top: -12px; transform: translateX(-50%) rotate(-4deg); }
 .star svg { display: block; width: 100%; height: 100%; }

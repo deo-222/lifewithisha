@@ -62,29 +62,30 @@ const ROOM = [
 
 // Phones (portrait): the same room recomposed for a tall, narrow screen. The view is ~640 canvas px
 // across, so everything reads bigger; the desk sits lower to free the wall for the hung pieces, and the
-// side table with the record player and the cat fill the floor in front of it.
-const DESK_DROP = 90;   // how much lower the desk and everything on it sits on phones
+// cat lies on the floor in front of it. No side table or record player on phones.
+const DESK_DROP = 90, DESK_SHIFT = 40;   // on phones the desk and everything on it sit lower, and a little right of centre
+const desk = (x, bottom) => ({ x: x + DESK_SHIFT, bottom: bottom + DESK_DROP });
 const PHONE = {
   painting: { hide: true },
   words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
-  "note-b": { x: 650, bottom: 454, w: 86, h: 86 },
-  vinyl: { x: 768, bottom: 476, w: 86 },
+  "note-b": { x: 652, bottom: 452, w: 70, h: 70 },
+  vinyl: { x: 735, bottom: 560, w: 122 },
   bulb: { x: 944, bottom: 468, w: 34 },
-  board: { x: 1150, bottom: 482, w: 104, h: 136 },
-  "note-a": { x: 1156, bottom: 580, w: 82, h: 82 },
-  megaphone: { x: 1214, bottom: 676, w: 62 },
-  floorlamp: { x: 638, bottom: 920, w: 100 },   // its shade clears the books
-  rug: { bottom: 1076 + DESK_DROP },
-  desk: { bottom: 930 + DESK_DROP },
-  books: { bottom: 609 + DESK_DROP },
-  candle: { bottom: 610 + DESK_DROP },
-  imac: { bottom: 609 + DESK_DROP },
-  mug: { bottom: 616 + DESK_DROP },
-  plant: { bottom: 610 + DESK_DROP },
-  chair: { bottom: 1012 + DESK_DROP },
-  sidetable: { x: 1090, bottom: 1286, w: 186 },
-  turntable: { x: 1114, bottom: 1087, w: 141 },   // on the table top (~201px above its feet at this size)
-  cat: { x: 650, bottom: 1262, w: 226 },
+  megaphone: { x: 1050, bottom: 472, w: 60 },
+  board: { x: 1150, bottom: 468, w: 102, h: 133 },
+  "note-a": { x: 1180, bottom: 584, w: 76, h: 76 },   // a clear gap below the board, clear of the plant
+  floorlamp: { x: 642, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
+  rug: desk(490, 1076),
+  desk: desk(700, 930),
+  books: desk(712, 609),
+  candle: desk(826, 610),
+  imac: desk(862, 609),
+  mug: desk(1040, 616),
+  plant: desk(1090, 610),
+  chair: desk(790, 1012),
+  sidetable: { hide: true },
+  turntable: { hide: true },
+  cat: { x: 1000, bottom: 1250, w: 240 },   // in front of the chair, on the right
 };
 ROOM.forEach((o) => { if (PHONE[o.id]) o.p = PHONE[o.id]; });
 
