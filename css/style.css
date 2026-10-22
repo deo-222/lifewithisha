@@ -231,6 +231,11 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
    Handoff: a copy of the Work heading the iMac screen dissolves into
    ========================================================================== */
 .handoff { position: absolute; inset: 0; z-index: 5; opacity: 0; visibility: hidden; background: var(--paper); pointer-events: none; }
+/* on desktop the copy is drawn (at opacity 0) all through the zoom, so Chrome has it painted before the
+   hand-off instead of painting it on that very frame, which let tiles of the room flash through */
+.zoom-on .handoff { visibility: visible; will-change: opacity; }
+.handed .stage { background: var(--paper); }
+.handed .scene { visibility: hidden; }
 /* the same copy on the iMac screen: a browser-sized page, shrunk to fit (scroll.js sets the size) */
 .screen-site { position: absolute; inset: 0; opacity: 0; background: var(--paper); pointer-events: none; }
 .screen-page { position: absolute; left: 50%; top: 50%; transform-origin: 50% 50%; }
