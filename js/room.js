@@ -84,7 +84,7 @@ const BOOKS = [
 // Pictures whose cast shadow is pre-rendered (assets/cast/), drawn with the same look as the CSS
 // drop shadows but without a live blur, which is costly to redraw while the camera zooms.
 // CAST_PAD is the margin those images carry around the object, in canvas px.
-const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "lamp-red"]);
+const CAST = new Set(["candle-amber", "imac", "mug-bears", "plant-pot", "desk-console", "side-table", "turntable-pink", "chair-3q", "lamp-red"]);
 const CAST_PAD = 48;
 
 // bulb centres on the string-lights image (fractions of its width/height)

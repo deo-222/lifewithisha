@@ -40,11 +40,18 @@ const scrollToY = (y) => (smoother ? smoother.scrollTo(y, true) : window.scrollT
 // get the same entrance as "work"), then glides on to the section.
 let zoomST = null;   // the room's zoom trigger, on desktop
 const scrollPos = () => (smoother ? smoother.scrollTop() : window.scrollY);
+let gliding = null;   // the current glide, so the visitor's own scrolling can take over at once
 function glide(to, dur, onComplete) {
-  if (smoother) return gsap.to(smoother, { scrollTop: to, duration: dur, ease: "power2.inOut", overwrite: true, onComplete });
+  if (gliding) gliding.kill();
+  if (smoother) return (gliding = gsap.to(smoother, { scrollTop: to, duration: dur, ease: "power2.inOut", onComplete }));
   const o = { y: window.scrollY };
-  return gsap.to(o, { y: to, duration: dur, ease: "power2.inOut", overwrite: true, onUpdate: () => window.scrollTo(0, o.y), onComplete });
+  return (gliding = gsap.to(o, { y: to, duration: dur, ease: "power2.inOut", onUpdate: () => window.scrollTo(0, o.y), onComplete }));
 }
+// any scrolling of their own cancels a glide (and the second leg queued after it), instead of fighting it
+const stopGlide = () => { if (gliding) { gliding.kill(); gliding = null; } };
+addEventListener("wheel", stopGlide, { passive: true });
+addEventListener("touchstart", stopGlide, { passive: true });
+addEventListener("keydown", (e) => { if (["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "].includes(e.key)) stopGlide(); });
 function goTo(sel) {
   const t = document.querySelector(sel); if (!t) return;
   const y = smoother ? smoother.offset(t, "top top") : t.getBoundingClientRect().top + window.scrollY;
@@ -121,6 +128,7 @@ const range = ([a, b], p) => Math.min(1, Math.max(0, (p - a) / (b - a)));
 const hint = document.querySelector(".room-hint");
 function roomStart(t) {
   hint.style.opacity = 1 - range([0, 0.6], t);
+  document.documentElement.classList.toggle("zoomed", t > 0.02);   // labels and pulses step aside once the zoom starts
 }
 const fading = () => document.querySelectorAll('.obj.float, .obj[data-id="words"]');
 
@@ -369,6 +377,11 @@ document.addEventListener("pointerup", (e) => {
   }
 }, { passive: true });
 
+// While the page is moving, objects slide under a still mouse pointer; without this they'd keep
+// flicking into their hover state (labels flashing, pictures re-brightening) mid-scroll.
+ScrollTrigger.addEventListener("scrollStart", () => document.documentElement.classList.add("is-scrolling"));
+ScrollTrigger.addEventListener("scrollEnd", () => document.documentElement.classList.remove("is-scrolling"));
+
 /* ---------------- the room: every labelled object does something ---------------- */
 const roomScene = document.getElementById("scene");
 const touch = matchMedia("(hover: none)");
@@ -394,7 +407,7 @@ const ACTS = {
     const s = document.createElement("span"); s.className = "smoke"; el.appendChild(s);
     setTimeout(() => { el.classList.remove("out"); s.remove(); }, 2600);   // and it lights itself again
   },
-  spotify() { window.open("https://open.spotify.com/playlist/2FHVNSH2EzrzBsci3A5ERx", "_blank", "noopener,noreferrer"); },
+  spotify() { window.open("https://open.spotify.com/playlist/3FPbDSFnM1eKzWLVyRI7tx", "_blank", "noopener,noreferrer"); },
   linkedin() { window.open("https://www.linkedin.com/in/ishadeo27", "_blank", "noopener,noreferrer"); },
   meet() { window.location.href = "mailto:deoisha278@gmail.com?subject=" + encodeURIComponent("Let's set up a chat"); },
   music() {

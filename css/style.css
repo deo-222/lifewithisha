@@ -604,7 +604,6 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 @keyframes hot-pulse { 0% { opacity: 0; transform: scale(.4); } 25% { opacity: 1; } 100% { opacity: 0; transform: scale(1.9); } }
 .obj.hot:hover > .pic { filter: saturate(.9) sepia(.1) brightness(1.08) var(--cast); }
 .obj.hot.baked:hover > .pic { filter: saturate(.9) sepia(.1) brightness(1.08); }
-.obj.hung { filter: drop-shadow(-12px 18px 12px rgba(60, 40, 22, .22)); }   /* hangs still on the wall */
 
 /* books: eight spines, one per case study; each pops up on hover */
 .obj[data-id="books"] { display: flex; align-items: flex-end; gap: 0; }
@@ -658,3 +657,7 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .hint-touch { display: none; }
 @media (hover: none) { .hint-touch { display: inline; } .hint-mouse { display: none; } }
 @media (max-width: 420px) { .room-hint { font-size: 10.5px; padding: 8px 12px; bottom: 16px; } }
+
+/* while the page scrolls, or once the zoom has started, the room's hover effects stand down */
+.is-scrolling .hot { pointer-events: none; }
+.zoomed .hot::after, .zoomed .hot::before { display: none; }
