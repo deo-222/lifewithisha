@@ -252,6 +252,7 @@ img, video, iframe { display: block; max-width: 100%; }
 }
 .sound-toggle { pointer-events: auto; border: 0; cursor: pointer; }
 .sound-toggle[aria-pressed="false"] { opacity: .65; }
+@media (max-aspect-ratio: 11/10) { .sound-toggle[aria-pressed="false"] { opacity: 1; } }   /* phones: "♪ play" is an invitation, not "off" */
 .topnav nav a:hover, .topnav nav a:focus-visible, .sound-toggle:hover { background: var(--pink); }
 a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid var(--burgundy); outline-offset: 3px; }
 
@@ -679,6 +680,16 @@ a:focus-visible, button:focus-visible, .rail:focus-visible { outline: 3px solid 
 .hint-touch { display: none; }
 @media (hover: none) { .hint-touch { display: inline; } .hint-mouse { display: none; } }
 @media (max-width: 420px) { .room-hint { font-size: 11px; padding: 8px 12px; bottom: 16px; } }
+/* touch screens: labels show one at a time in this spot above the hint (scroll.js), not over each piece */
+.tap-label {
+  position: absolute; left: 50%; bottom: 64px; z-index: 7; margin: 0; max-width: calc(100% - 32px);
+  padding: 9px 16px; border-radius: 999px; background: #FBF8F2; color: var(--ink); text-align: center;
+  font: 700 13px/1.2 "Space Mono", monospace; box-shadow: 0 6px 16px rgba(60, 40, 22, .22);
+  pointer-events: none; opacity: 0; transform: translate(-50%, 6px); transition: opacity .18s ease, transform .18s ease;
+}
+.tap-label.on { opacity: 1; transform: translate(-50%, 0); }
+.tap-label:empty { display: none; }
+@media (hover: none) { .hot::after { display: none; } }
 @media (max-width: 380px) { .topnav nav a, .sound-toggle { font-size: 10.5px; padding: 7px 6px; } .wordmark { font-size: 16px; } }
 
 /* while the page scrolls, or once the zoom has started, the room's hover effects stand down */

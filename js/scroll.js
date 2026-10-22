@@ -422,10 +422,15 @@ const ACTS = {
 function roomAct(el) {
   if (el.dataset.go) goTo(el.dataset.go);
   else if (ACTS[el.dataset.act]) ACTS[el.dataset.act](el);
-  if (touch.matches) {   // touch screens have no hover, so the label shows briefly after a tap
-    el.classList.add("show-label");
-    setTimeout(() => el.classList.remove("show-label"), 1400);
-  }
+  if (touch.matches) showTapLabel(el.dataset.label);
+}
+// Touch screens have no hover, so a tap shows the piece's label for a moment in one fixed spot near the
+// bottom of the room, where it can't run off the screen or land on top of another piece.
+const tapLabel = document.querySelector(".tap-label");
+let tapTimer = null;
+function showTapLabel(text) {
+  tapLabel.textContent = text; tapLabel.classList.add("on");
+  clearTimeout(tapTimer); tapTimer = setTimeout(() => tapLabel.classList.remove("on"), 1600);
 }
 roomScene.addEventListener("click", (e) => {
   const el = e.target.closest(".hot"); if (el) roomAct(el);
