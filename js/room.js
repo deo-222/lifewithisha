@@ -66,14 +66,16 @@ const ROOM = [
 const DESK_DROP = 90, DESK_SHIFT = 40;   // on phones the desk and everything on it sit lower, and a little right of centre
 const desk = (x, bottom) => ({ x: x + DESK_SHIFT, bottom: bottom + DESK_DROP });
 const PHONE = {
-  painting: { src: "painting-limes", x: 656, bottom: 250, w: 92, h: 115 },   // top left on the back wall, so seen straight on
+  // the wall keeps one piece per spot so it doesn't crowd: the "work" note and the megaphone stay on desktop
+  // (the screen, the menu and the board cover them here)
+  painting: { src: "painting-limes", x: 662, bottom: 246, w: 84, h: 105 },   // top left on the back wall, so seen straight on
+  "note-b": { x: 1170, bottom: 236, w: 76, h: 76 },   // top right, opposite the painting
   words: { x: 650, bottom: 330, w: 620, h: 230, k: 0.74 },
-  "note-b": { x: 652, bottom: 452, w: 70, h: 70 },
-  vinyl: { x: 735, bottom: 560, w: 122 },
-  bulb: { x: 944, bottom: 468, w: 34 },
-  megaphone: { x: 1050, bottom: 472, w: 60 },
-  board: { x: 1162, bottom: 458, w: 100, h: 131 },
-  "note-a": { x: 1182, bottom: 562, w: 74, h: 74 },   // a clear gap below the board, clear of the plant
+  vinyl: { x: 676, bottom: 548, w: 116 },
+  bulb: { x: 948, bottom: 472, w: 36 },
+  board: { x: 1150, bottom: 540, w: 100, h: 131 },
+  "note-a": { hide: true },
+  megaphone: { hide: true },
   floorlamp: { x: 616, bottom: 1006, w: 126 },   // stands beside the desk, its shade well above the desk top
   rug: desk(490, 1076),
   desk: desk(700, 930),
